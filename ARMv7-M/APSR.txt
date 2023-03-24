@@ -1,0 +1,47 @@
+cond. | APSR
+code  |
+	  |
+EQ	  | Z = 1
+NE	  | Z = 0
+	  |
+LT	  | N = !V
+GT	  | N = V && Z = 0
+	  |
+LE	  | N = !V && Z = 1
+GE	  | N = V
+	  |
+LO(CC)| C = 0
+HI	  | C = 1 && Z = 0
+	  |
+LS	  | C = 0 && Z = 1
+HS(CS)| C = 1
+	  |
+VC	  | V = 0
+VS	  | V = 1
+	  |
+MI	  | N = 1
+PL	  | N = 0
+	  |
+AL	  | unconditional
+
+VS, CS: V set, C set
+VC, CC: V clear, C clear
+
+signed
+CMP	r1, r2
+	if N = 0 && V = 0
+		r1 >= r2
+	if N = 1 && V = 0
+		r1 < r2
+	if N = 0 && V = 1
+		r1 < r2
+	if N = 1 && V = 1
+		r1 >= r2
+
+unsigned
+CMP r1, r2
+	if C = 1
+		r1 >= r2
+	if C = 0
+		r1 < r2
+		
