@@ -53,23 +53,23 @@ calc:
 	addi	x2, x2, -8
 	sd		x1,	0(x2)
 
-	beq		x10, 0, add
-	beq		x10, 1, sub
+	beq		x10, 0, addition
+	beq		x10, 1, subtraction
 
 	addi	x6, x13, 0
 	addi	x7, x0, 33
-	beq		x10, 2, mul
-	beq		x10, 3, div
+	beq		x10, 2, multiplication
+	beq		x10, 3, division
 
-add:
+addition:
 	add		x10, x12, x13
 	jalr	x0, 0(x1)
 
-sub:
+subtraction:
 	sub		x10, x12, x13 
 	jalr	x0, 0(x1)
 
-mul:
+multiplication:
 	# x12: multiplicand
 	# x13: multiplier
 	# x10: product
@@ -82,7 +82,7 @@ mul:
 	sll		x6, x6, 1
 	beq		x18, 0, mul
 
-div:
+division:
 
 exit:
         #--------------------------------------------------------------------
