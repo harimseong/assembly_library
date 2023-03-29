@@ -6,7 +6,19 @@
 # main
 main:
 	
-	#jal x1, test #uncomment for the functionality test!!
+	jal x1, test #uncomment for the functionality test!!
+
+#	lui	t0, 0x1
+#	addi	t0, t0, 0x7b
+#	addi	t1, t0, 0
+#	addi	x11, x0, 3
+#	lui	t0, 0x8
+#	addi	t0, t0, 0xae
+#	addi	t1, x0, 0x84
+#	add		x12, x0, t0
+#	add		x13, x0, t1
+#	addi	x11, x0, 3
+#	jal 	x1, calc
 	
 	#----TODO-------------------------------------------------------------
 	#1. read a string from the console
@@ -24,11 +36,11 @@ main:
 #----------------------------------
 #name: calc
 #func: performs arithmetic operation
-#x11(a1): arithmetic operation (0: addition, 1:  subtraction, 2:  multiplication, 3: division)
+#x10(a0): return value
+#x11(a1): arithmetic operation (0: f_add, 1:  f_sub, 2:  f_mul, 3: f_div)
 #x12(a2): the first operand
 #x13(a3): the second operand
-#x10(a0): return value
-#x14(a4): return value (remainder for division operation)
+#x14(a4): return value (remainder for f_div operation)
 #----------------------------------
 calc:
 # registers	ABIname	Description							Saver
@@ -50,43 +62,69 @@ calc:
 # return address, arguments, 
 	
         #---TODO-------------------------------------------------------------
-	addi	x2, x2, -8
-	sd		x1,	0(x2)
+	addi	x5, x0, 0
+	beq		x11, x5, f_add
+	addi	x5, x5, 1
+	beq		x11, x5, f_sub
 
-	beq		x10, 0, addition
-	beq		x10, 1, subtraction
+	addi	x5, x5, 1
+	beq		x11, x5, f_mul
+	addi	x5, x5, 1
+	beq		x11, x5, f_div
 
-	addi	x6, x13, 0
-	addi	x7, x0, 33
-	beq		x10, 2, multiplication
-	beq		x10, 3, division
-
-addition:
+f_add:
 	add		x10, x12, x13
 	jalr	x0, 0(x1)
 
-subtraction:
+f_sub:
 	sub		x10, x12, x13 
 	jalr	x0, 0(x1)
 
-multiplication:
-	# x12: multiplicand
-	# x13: multiplier
-	# x10: product
-	# x6: initially equals to multiplier. product is added at [63,32] and sll x6, 1 per cycle
-	# x7: initially 32 and decrement until 0 to break loop
-	# x18: stores LSB of x6
-	beq		x7, 0, exit
-	sub		x7, x7, 1
-	andi	x18, x6, 1
-	sll		x6, x6, 1
-	beq		x18, 0, mul
+f_mul:
+	# x12(a2):	multiplicand
+	# x13(a3):	multiplier
+	# x10(a0):	product (initially multiplier)
+	# x5(t0):	initially 32. decrement until 0
+	# x6(t2):	saves shifted multiplicand
+	# x7(t1):	bit representing LSB of product register
+	addi	x10, x13, 0
+	addi	x5, x0, 32
+	addi	x6, x12, 0
+	slli	x6, x6, 32
+f_mul_l0:
+	andi	x7, x10, 1
+	beq		x7, x0, f_mul_l1
+	add		x10, x10, x6
+f_mul_l1:
+	srli	x10, x10, 1
+	addi	x5, x5, -1
+	beq		x5, x0, exit
+	jal		x0, f_mul_l0
 
-division:
+f_div:
+	# x12(a2):	dividend
+	# x13(a3):	divisor
+	# x14(a4):	remainder, initially dividend
+	# x10(a0):	quotient
+	# x5(t0):	initially 32. decrement until 0
+	addi	x10, x0, 0
+	slli	x13, x13, 32
+	addi	x14, x12, 0
+	addi	x5, x0, 32
+f_div_l0:
+	srli	x13, x13, 1
+	blt		x14, x13, f_div_l1
+	addi	x10, x10, 1
+	sub		x14, x14, x13
+f_div_l1:
+	addi	x5, x5, -1
+	beq		x5, x0, exit
+	slli	x10, x10, 1
+	jal		x0, f_div_l0
 
 exit:
+
         #--------------------------------------------------------------------
 	jalr x0, 0(x1)
-
 
 .include "common.asm"

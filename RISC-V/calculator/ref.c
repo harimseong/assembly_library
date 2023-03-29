@@ -15,6 +15,7 @@ int	main()
 	unsigned int	a3 = 0xffffffff;
 	unsigned int	a4;
 
+	fscanf(stdin, "%u %u %u", &a1, &a2, &a3);
 	a0 = calc(a1, a2, a3, &a4);
 	switch (a1)
 	{
