@@ -12,7 +12,7 @@ main:									   ; This is called by the C library startup code
 		mov		rax, 1
 		mov		rdi, 1
 		mov		rsi, message
-		mov		rdx, 12
+		mov		rdx, 13
 		syscall
 		mov		rdi, message			; First integer (or pointer) argument in rdi
 		call	puts					; puts(message)
