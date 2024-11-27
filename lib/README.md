@@ -27,7 +27,7 @@ main function is required to test these functions.
 
 ### Work Process
 ---
-###### 1. generate assembly of simple c program to understand basic assembly.
+##### 1. Generate assembly of simple c program to understand basic assembly.
 ```
 // simple.c
 int main(int argc, char** argv)
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 
 ```
 
-compile it with `clang simple.c -S -O0 -target x86_64-apple-darwin-macho`, then `simple.s` is generated
+compile it with `clang simple.c -S -O0 --target=x86_64-apple-darwin-macho`, then `simple.s` is generated
 
 ```
 	.section	__TEXT,__text,regular,pure_instructions
@@ -122,8 +122,10 @@ Things I know partially or can relate to something I know already are:
 [GAS - .section name](https://ftp.gnu.org/old-gnu/Manuals/gas/html_chapter/as_7.html#SEC119)
 
 ___
-###### 2. Interpret the Assembly Code
-compiled `simple.c` with `clang simple.c -S -mllvm --x86-asm-syntax=intel -O3 -target x86_64-apple-darwin-macho -fno-asynchronous-unwind-tables`
+##### 2. Interpret the Assembly Code
+compiled `simple.c` with 
+`clang simple.c -S -mllvm --x86-asm-syntax=intel -O3 --target=x86_64-apple-darwin-macho -fno-asynchronous-unwind-tables`
+
 ```
 	.section	__TEXT,__text,regular,pure_instructions
 	.build_version macos, 14, 5	sdk_version 14, 5
@@ -141,9 +143,38 @@ _main:                                  ## @main
 .subsections_via_symbols
 ```
 There are some assembler directives that are still ambiguous. Instead of trying to find what are they, start to consider NASM directives. I must write assembly code for NASM to be able to assemble.
+###### translation to NASM 
 1. `.section`
-	text section for NASM: `section .text`
+	text section: `section .text`
 2. `.globl`
-	external symbol for NASM: `global symbol_name`
+	external symbol: `global symbol_name`
 3. `.p2align`
-	alignment directive for NASM: `align` or `alignb`
+	alignment directive: `align` or `alignb`
+
+```
+section .text
+global  _main
+align   4
+_main:
+	push rbp
+	mov  rbp, rsp
+	mov  eax, edi
+	pop  rbp
+	ret
+```
+
+###### Calling Convention of System V AMD64 ABI
+https://wiki.osdev.org/System_V_ABI
+- function parameters: `rdi, rsi, rdx, rcx, r8, r9`
+- callee saved: `rbx, rsp, rbp, r12, r13, r14, r15`
+- caller saved: function parameters + `r10, r11`
+
+###### Instructions
+intel assembly instruction syntax: `inst [reg0, reg1, ...]`
+If there are more than one register, reg0 is source register.
+1. `push rbp`
+	`rbp`is base pointer and callee saved register. `push` will save `rbp` to where`rsp` is pointing to and add -8 to `rsp`.
+2. `mov rbp, rsp`
+	set `rbp` to `rsp`. new base pointer is current stack point.
+3. `mov eax, edi`
+	`rdi` contains `int argc` . 
