@@ -28,6 +28,7 @@ main function is required to test these functions.
 ### Work Process
 ---
 ##### 1. Generate assembly of simple c program to understand basic assembly.
+
 ```
 // simple.c
 int main(int argc, char** argv)
@@ -68,6 +69,7 @@ Things I didn't know of are:
 - `.cfi_def_cfa_register 16`
 - `.cfi_endproc`
 - `.subsections_via_symbols`
+
 Things I know partially or can relate to something I know already are:
 - `.section ...`
 - `.build_version ...`
@@ -123,6 +125,7 @@ Things I know partially or can relate to something I know already are:
 
 ___
 ##### 2. Interpret the Assembly Code
+
 compiled `simple.c` with 
 `clang simple.c -S -mllvm --x86-asm-syntax=intel -O3 --target=x86_64-apple-darwin-macho -fno-asynchronous-unwind-tables`
 
@@ -142,7 +145,7 @@ _main:                                  ## @main
                                         ## -- End function
 .subsections_via_symbols
 ```
-There are some assembler directives that are still ambiguous. Instead of trying to find what are they, start to consider NASM directives. I must write assembly code for NASM to be able to assemble.
+There are some assembler directives that are still ambiguous. Instead of trying to find what are they, start to consider NASM directives. I must write assembly code that NASM can assemble.
 ###### translation to NASM 
 1. `.section`
 	text section: `section .text`
@@ -173,8 +176,47 @@ https://wiki.osdev.org/System_V_ABI
 intel assembly instruction syntax: `inst [reg0, reg1, ...]`
 If there are more than one register, reg0 is source register.
 1. `push rbp`
-	`rbp`is base pointer and callee saved register. `push` will save `rbp` to where`rsp` is pointing to and add -8 to `rsp`.
+	`rbp`is base pointer and callee saved register. `push` will subtract size of `rbp` (8 bytes) from `rsp` and set the top of the stack pointed by `rsp` to `rbp`.
+	
 2. `mov rbp, rsp`
+
 	set `rbp` to `rsp`. new base pointer is current stack point.
 3. `mov eax, edi`
-	`rdi` contains `int argc` . 
+	`rdi` contains value of `int argc` according to the calling convention. set return value register, `eax`, to `int argc` before return.
+	
+4. `pop rbp`
+	before return, restore callee saved `rbp` from the top of the stack and increment `rsp`.
+
+___
+##### 3. Assemble, Link and Execute the Code
+
+- Assemble command: `nasm -f macho64 simple.s`
+
+- Link command with `clang`: `clang simple.o -target=x86_64-apple-darwin-macho`
+	`ld: warning: no platform load command found in '/Users/hseong/assembly_practice/lib/simple_nasm.o', assuming: macOS`
+	warning disappears if `-Wl,-ld_classic` is appended to the command.
+	`ld-classic` can be found in macOS man page
+
+- Link command with `ld`
+	`ld simple.o` 
+		error: `Missing -platform_version option`
+	
+	`ld simple.o -platform_version macos 14.5 14.5`
+		warning: `no platform load command found in '/Users/hseong/assembly_practice/lib/simple_nasm.o', assuming: macOS`
+	
+	`ld simple.o -platform_version macos 14.5 14.5 -ld_classic`
+		error: `dynamic executables or dylibs must link with libSystem.dylib for architecture x86_64`
+		Check implicit linker option that working command `clang simple.o -target=x86_64-apple-darwin-macho -v` passed to `ld` by using `-v` `clang` option.
+	
+	`ld simple.o -platform_version macos 14.5 14.5 -ld_classic -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -lSystem`
+		this command works without warning and error.
+	
+	`ld simple.o -ld_classic`
+		this command works fine.
+	
+	Using `-ld_classic` is necessary to avoid warning.
+
+- Every executables generated with or without warning work as expected.
+
+---
+##### 4. 
