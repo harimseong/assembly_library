@@ -1,8 +1,8 @@
-#### Assembly Library Project
+## Assembly Library Project
 This document describes a process to accomplish the project. 
 
-##### Requirements
 ---
+##### Requirements
 ###### Function Implementation
 
 This project aims at re-writing following functions in assembly language.
@@ -18,15 +18,16 @@ main function is required to test these functions.
 - Must be able to generate position independent executable.
 - Requires system call error handling (e.g. errno)
 
-##### Expected Knowledges
 ---
+##### Expected Knowledges
 - x86 instructions
 - UNIX system call interface (read and write)
 - Intel assembly language syntax
 - file format (Mach-O for macOS) possibly?
 
-### Work Process
 ---
+### Phase 1: Understand Assembly
+
 ##### 1. Generate assembly of simple c program to understand basic assembly.
 
 ```
@@ -77,6 +78,8 @@ Things I know partially or can relate to something I know already are:
 - `.p2align ...`
 
 ---
+##### 1-1. Learn Assemble Directives
+ 
 - ###### CFI (Call Frame Information)
 	reference
 	https://sourceware.org/binutils/docs/as/CFI-directives.html
@@ -151,13 +154,13 @@ There are some assembler directives that are still ambiguous. Instead of trying 
 	text section: `section .text`
 2. `.globl`
 	external symbol: `global symbol_name`
-3. `.p2align`
-	alignment directive: `align` or `alignb`
+3. `.p2align power_of_2`
+	alignment directive: `align bytes, optional` or `alignb bytes`
 
 ```
 section .text
 global  _main
-align   4
+align   16
 _main:
 	push rbp
 	mov  rbp, rsp
@@ -166,11 +169,12 @@ _main:
 	ret
 ```
 
-###### Calling Convention of System V AMD64 ABI
-https://wiki.osdev.org/System_V_ABI
+######  Calling Convention of System V AMD64 ABI
+[System V ABI](https://wiki.osdev.org/System_V_ABI)
 - function parameters: `rdi, rsi, rdx, rcx, r8, r9`
 - callee saved: `rbx, rsp, rbp, r12, r13, r14, r15`
 - caller saved: function parameters + `r10, r11`
+- return: `rax`
 
 ###### Instructions
 intel assembly instruction syntax: `inst [reg0, reg1, ...]`
@@ -179,13 +183,14 @@ If there are more than one register, reg0 is source register.
 	`rbp`is base pointer and callee saved register. `push` will subtract size of `rbp` (8 bytes) from `rsp` and set the top of the stack pointed by `rsp` to `rbp`.
 	
 2. `mov rbp, rsp`
-
 	set `rbp` to `rsp`. new base pointer is current stack point.
 3. `mov eax, edi`
 	`rdi` contains value of `int argc` according to the calling convention. set return value register, `eax`, to `int argc` before return.
 	
 4. `pop rbp`
 	before return, restore callee saved `rbp` from the top of the stack and increment `rsp`.
+5. `ret`
+	near return - jump to an address located on the top of the stack and pops it from the stack.
 
 ___
 ##### 3. Assemble, Link and Execute the Code
@@ -218,5 +223,22 @@ ___
 
 - Every executables generated with or without warning work as expected.
 
+
 ---
-##### 4. 
+### Phase 2: Start Writing Code
+
+##### 1. strlen
+function signature: `size_t strlen(const char *s);`
+###### size_t
+- `size_t` is defined as `unsigned long` according to `machine/types.h` of macOS SDK.
+- C implementation in this machine uses [LP64](https://unix.org/version2/whatsnew/lp64_wp.html), which means `long int` and `unsigned long int` are 64 bits type.
+- return register will be `rax`.
+
+###### strlen
+- `global strlen` to set it to external symbol.
+
+###### const char*
+- `const` is type qualifier provided by compiler.
+- need to test how `const` affects generated assembly code.
+- `char*` is pointer type which should be 64 bits wide, because of `ptrdiff_t` being `long int`.
+- register will be `rdi`. according to [this](#calling-convention-of-system-v-amd64-abi).
