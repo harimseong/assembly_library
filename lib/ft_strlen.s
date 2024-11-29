@@ -24,5 +24,5 @@ loop:
 
   sub   rax, rdi
 
-  pop rbp
+  pop   rbp
   ret

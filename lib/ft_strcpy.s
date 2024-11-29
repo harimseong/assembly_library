@@ -1,0 +1,20 @@
+  section .text
+  global _ft_strcpy
+  align 16
+
+; char * ft_strcpy(char * dst, const char * src);
+_ft_strcpy:
+  push  rbp
+  mov   rbp, rsp
+  mov   rax, rdi
+
+loop:
+  mov   dl, byte [rsi]
+  mov   byte [rdi], dl
+  inc   rdi
+  inc   rsi
+  cmp   dl, 0
+  jnz   loop
+
+  pop   rbp
+  ret
