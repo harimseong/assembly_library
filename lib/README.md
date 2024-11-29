@@ -224,7 +224,9 @@ ___
 ### Phase 2: Start Writing Code
 ---
 ##### 1. strlen
+---
 function signature: `size_t strlen(const char *s);`
+	returns difference of bytes between `s` and an address containing first null terminator.
 ###### size_t
 - `size_t` is defined as `unsigned long` according to `machine/types.h` of macOS SDK.
 - C implementation in this machine uses [LP64](https://unix.org/version2/whatsnew/lp64_wp.html), which means `long int` and `unsigned long int` are 64 bits type.
@@ -244,4 +246,22 @@ function signature: `size_t strlen(const char *s);`
 
 ###### mov size
 [Assembly Intel Syntax](https://en.wikipedia.org/wiki/X86_assembly_language)
-- example `mov rax, byte [rsp]`
+- example `mov al, byte [rsp]`
+
+###### symbol `_strlen`
+- symbol `strlen` is automatically prepended by `_` clang when main function is compiled. 
+- use `_strlen` as symbol name.
+- why does this happen?
+- gcc option has [-fleading-underscore](https://gcc.gnu.org/onlinedocs/gcc-4.4.0/gcc/Code-Gen-Options.html#index-fleading_002dunderscore-1989) and its counterpart -fno-leading-underscore. clang does not have this option and it seems to use leading underscore by default.
+- C compiler prepended underscore to generated mangled identifiers to avoid name collision between assembly code and c code that have same symbol?
+[Stack overflow - What is the reason function names are prefixed with an underscore by the compiler](https://stackoverflow.com/questions/5908568/what-is-the-reason-function-names-are-prefixed-with-an-underscore-by-the-compile)
+
+##### 2. strcpy
+---
+function signature: `char * strcpy(char * dst, const char * src);`
+	return `dst` and copy `[src, src_end)` bytes to `[dst, dst + src_end - src)` where `src_end` contains first null-terminator.
+
+###### ret bug
+- `ret` instruction in strcpy acts like `ret` in main function, which means the process exits if strcpy returns.
+- `mov rsp, rbp` -> `mov rbp, rsp`
+- the top of the stack pointed to the stack frame of main function.
