@@ -1,5 +1,5 @@
 NAME		= libasm.a
-
+TESTNAME= tester
 
 CC			= clang
 CFLAGS	= --target=x86_64-macos-darwin-macho
@@ -14,6 +14,9 @@ ARFLAGS = -r
 SRC			= ft_strlen.s
 OBJ			= $(SRC:%.s=%.o)
 
+TESTSRC = main.c
+TESTOBJ = $(TESTSRC:%.c=%.o)
+
 all: $(NAME)
 
 $(NAME): $(OBJ)
@@ -22,15 +25,17 @@ $(NAME): $(OBJ)
 $(OBJ): %.o: %.s
 	$(AS) $(ASFLAGS) $<
 
-test: $(NAME)
-	$(CC) $(CFLAGS) -c main.c
-	$(LD) $(LDFLAGS) main.o $(NAME)
+tester: $(NAME) $(TESTOBJ)
+	$(LD) $(LDFLAGS) $(NAME) $(TESTOBJ) -o $(TESTNAME)
+
+$(TESTOBJ): %.o: %.c
+	$(CC) $(CFLAGS) -c $<
 
 clean:
-	$(RM) $(OBJ)
+	$(RM) $(OBJ) $(TESTOBJ)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) $(TESTNAME)
 
 re: fclean
 	$(MAKE) all
