@@ -1,8 +1,9 @@
 ## Assembly Library Project
+---
 This document describes a process to accomplish the project. 
 
----
 ##### Requirements
+---
 ###### Function Implementation
 
 This project aims at re-writing following functions in assembly language.
@@ -18,18 +19,17 @@ main function is required to test these functions.
 - Must be able to generate position independent executable.
 - Requires system call error handling (e.g. errno)
 
----
 ##### Expected Knowledges
+---
 - x86 instructions
 - UNIX system call interface (read and write)
 - Intel assembly language syntax
 - file format (Mach-O for macOS) possibly?
 
----
 ### Phase 1: Understand Assembly
-
+---
 ##### 1. Generate assembly of simple c program to understand basic assembly.
-
+---
 ```
 // simple.c
 int main(int argc, char** argv)
@@ -77,9 +77,8 @@ Things I know partially or can relate to something I know already are:
 - `.globl _main`
 - `.p2align ...`
 
----
 ##### 1-1. Learn Assemble Directives
- 
+---
 - ###### CFI (Call Frame Information)
 	reference
 	https://sourceware.org/binutils/docs/as/CFI-directives.html
@@ -126,9 +125,8 @@ Things I know partially or can relate to something I know already are:
 [GAS - Sections and Relocation](https://ftp.gnu.org/old-gnu/Manuals/gas/html_chapter/as_4.html#SEC39)
 [GAS - .section name](https://ftp.gnu.org/old-gnu/Manuals/gas/html_chapter/as_7.html#SEC119)
 
-___
 ##### 2. Interpret the Assembly Code
-
+___
 compiled `simple.c` with 
 `clang simple.c -S -mllvm --x86-asm-syntax=intel -O3 --target=x86_64-apple-darwin-macho -fno-asynchronous-unwind-tables`
 
@@ -177,6 +175,7 @@ _main:
 - return: `rax`
 
 ###### Instructions
+[x86_64 cheatsheet in AT&T syntax](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf)
 intel assembly instruction syntax: `inst [reg0, reg1, ...]`
 If there are more than one register, reg0 is source register.
 1. `push rbp`
@@ -192,9 +191,8 @@ If there are more than one register, reg0 is source register.
 5. `ret`
 	near return - jump to an address located on the top of the stack and pops it from the stack.
 
-___
 ##### 3. Assemble, Link and Execute the Code
-
+___
 - Assemble command: `nasm -f macho64 simple.s`
 
 - Link command with `clang`: `clang simple.o -target=x86_64-apple-darwin-macho`
@@ -223,10 +221,8 @@ ___
 
 - Every executables generated with or without warning work as expected.
 
-
----
 ### Phase 2: Start Writing Code
-
+---
 ##### 1. strlen
 function signature: `size_t strlen(const char *s);`
 ###### size_t
@@ -242,3 +238,10 @@ function signature: `size_t strlen(const char *s);`
 - need to test how `const` affects generated assembly code.
 - `char*` is pointer type which should be 64 bits wide, because of `ptrdiff_t` being `long int`.
 - register will be `rdi`. according to [this](#calling-convention-of-system-v-amd64-abi).
+
+###### sub, cmp instruction
+- minuend  - subtrahend
+
+###### mov size
+[Assembly Intel Syntax](https://en.wikipedia.org/wiki/X86_assembly_language)
+- example `mov rax, byte [rsp]`
