@@ -182,29 +182,29 @@ _main:
 [x86_64 cheatsheet in AT&T syntax](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf)\
 Intel assembly instruction syntax: `inst [reg0, reg1, ...]`
 If there are more than one register, reg0 is source register.
-1. `push rbp`
+1. `push rbp`\
 	`rbp`is base pointer and callee saved register. `push` will subtract size of `rbp` (8 bytes) from `rsp` and set the top of the stack pointed by `rsp` to `rbp`.
 	
-2. `mov rbp, rsp`
+2. `mov rbp, rsp`\
 	Set `rbp` to `rsp`. new base pointer is current stack point.
-3. `mov eax, edi`
+3. `mov eax, edi`\
 	`rdi` contains value of `int argc` according to the calling convention. set return value register, `eax`, to `int argc` before return.
 	
-4. `pop rbp`
+4. `pop rbp`\
 	Before return, restore callee saved `rbp` from the top of the stack and increment `rsp`.
-5. `ret`
+5. `ret`\
 	Near return - jump to an address located on the top of the stack and pops it from the stack.
 
 ##### 3. Assemble, Link and Execute the Code
 
 - Assemble command: `nasm -f macho64 simple.s`
 
-- Link command with `clang`: `clang simple.o -target=x86_64-apple-darwin-macho`
+- Link command with `clang`: `clang simple.o -target=x86_64-apple-darwin-macho`\
 	`ld: warning: no platform load command found in '/Users/hseong/assembly_practice/lib/simple_nasm.o', assuming: macOS`\
 	warning disappears if `-Wl,-ld_classic` is appended to the command.
 	`ld-classic` can be found in macOS man page
 
-- Link command with `ld`
+- Link commands with `ld`:
 	`ld simple.o`\
 		error: `Missing -platform_version option`
 	
@@ -342,7 +342,7 @@ System call functions like read(2) are libc function that wraps around assembly 
 [syscallenter\(\) - sys/kern/subr_syscall.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/subr_syscall.c)\
 [sys\_read\(\) - sys/kern/sys_generic.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/sys_generic.c)
 
-I need to trigger system call trap with system call number. 
+System call trap is triggered with syscall instruction and system call number stored in rax. 
 
 ##### 5. read
 
@@ -357,3 +357,4 @@ I need to trigger system call trap with system call number.
 ##### 1. Improvement candidates
 
 1. align width
+2. -ld_classic
