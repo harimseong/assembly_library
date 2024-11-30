@@ -13,6 +13,7 @@ This project aims at re-writing following functions in assembly language.
 - strdup(3)
 - read(2)
 - write(2)
+Makefile is required to build a library consists of the functions.
 main function is required to test these functions.
 ###### Constraints
 - Conforms to System V AMD64 ABI calling convention.
@@ -96,6 +97,7 @@ Things I know partially or can relate to something I know already are:
   	
 	[OS X Assembler Reference - Directives for Designating the Current Section](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)
 	`.section  segname, sectname [[[, type], attribute], sizeof_stub]`
+	
 	segname = \_\_TEXT\_\_
 	sectname = \_\_text
 	type = regular
@@ -107,21 +109,23 @@ Things I know partially or can relate to something I know already are:
 
 - `.build_version macos, 14, 5	sdk_version 14, 5`
 	https://forums.developer.apple.com/forums/thread/736942
-	could not find any document containing this assembler directive.
-	assume it is miscellaneous directive because generated assembly code targeted to specific architecture already.
+	Could not find any document containing this assembler directive.
+	Assume it is miscellaneous directive because generated assembly code targeted to specific architecture already.
 
 - `.globl _main`
   	
 	[OS X Assembler Reference - Directives for Dealing With Symbol](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html),
 	`.globl  symbol_name`
+	
 	This directive makes symbol_name external.
 
 - `.p2align  4, 0x90`
   	
 	[OS X Assembler Reference - Directives for Moving the Location Counter](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html),
 	`.p2align  align_expression [, 1_byte_fill_expression [, max_bytes_to_fill]]`
-	align location counter to 2^{align_expression} bytes and fill space between current and next location counter with {1_byte_fill_expression}.
-	if bytes of the space is equal to or larger than {max_bytes_to_fill}, this directive does nothing.
+	
+	Align location counter to 2^{align_expression} bytes and fill space between current and next location counter with {1_byte_fill_expression}.
+	If bytes of the space is equal to or larger than {max_bytes_to_fill}, this directive does nothing.
 
 [NASM - Assembler Directives - Section](https://www.nasm.us/xdoc/2.16.03/html/nasmdoc7.html#section-7.3)
 [NASM - Output Formats - Mach Object ](https://www.nasm.us/xdoc/2.16.03/html/nasmdoc8.html#section-8.8)
@@ -130,7 +134,7 @@ Things I know partially or can relate to something I know already are:
 
 ##### 2. Interpret the Assembly Code
 ___
-compiled `simple.c` with 
+Compiled `simple.c` with 
 `clang simple.c -S -mllvm --x86-asm-syntax=intel -O3 --target=x86_64-apple-darwin-macho -fno-asynchronous-unwind-tables`
 
 ```
@@ -150,7 +154,7 @@ _main:                                  ## @main
 .subsections_via_symbols
 ```
 There are some assembler directives that are still ambiguous. Instead of trying to find what are they, start to consider NASM directives. I must write assembly code that NASM can assemble.
-###### translation to NASM 
+###### Translation to NASM 
 1. `.section`
 	text section: `section .text`
 2. `.globl`
@@ -172,27 +176,27 @@ _main:
 
 ######  Calling Convention of System V AMD64 ABI
 [System V ABI](https://wiki.osdev.org/System_V_ABI)
-- function parameters: `rdi, rsi, rdx, rcx, r8, r9`
-- callee saved: `rbx, rsp, rbp, r12, r13, r14, r15`
-- caller saved: function parameters + `r10, r11`
-- return: `rax`
+- Function parameters: `rdi, rsi, rdx, rcx, r8, r9`
+- Callee saved: `rbx, rsp, rbp, r12, r13, r14, r15`
+- Caller saved: function parameters + `r10, r11`
+- Return: `rax`
 
 ###### Instructions
 [x86_64 cheatsheet in AT&T syntax](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf)
-intel assembly instruction syntax: `inst [reg0, reg1, ...]`
+Intel assembly instruction syntax: `inst [reg0, reg1, ...]`
 If there are more than one register, reg0 is source register.
 1. `push rbp`
 	`rbp`is base pointer and callee saved register. `push` will subtract size of `rbp` (8 bytes) from `rsp` and set the top of the stack pointed by `rsp` to `rbp`.
 	
 2. `mov rbp, rsp`
-	set `rbp` to `rsp`. new base pointer is current stack point.
+	Set `rbp` to `rsp`. new base pointer is current stack point.
 3. `mov eax, edi`
 	`rdi` contains value of `int argc` according to the calling convention. set return value register, `eax`, to `int argc` before return.
 	
 4. `pop rbp`
-	before return, restore callee saved `rbp` from the top of the stack and increment `rsp`.
+	Before return, restore callee saved `rbp` from the top of the stack and increment `rsp`.
 5. `ret`
-	near return - jump to an address located on the top of the stack and pops it from the stack.
+	Near return - jump to an address located on the top of the stack and pops it from the stack.
 
 ##### 3. Assemble, Link and Execute the Code
 ___
@@ -226,14 +230,29 @@ ___
 
 ### Phase 2: Start Writing Code
 ---
+##### 0. Makefile and Miscellaneous
+---
+###### Requirements
+- There are mandatory targets `LIBRARY_NAME, all, clean, fclean, re`.
+- Use `uname` command to decide build environment (e.g. OS and architecture) and assemble & link options.
+
+###### tester
+- Add tester target that compile main function and test functions and link them with the library.
+- Examine final machine code by executing `objdump --disassemble --disassembler-options=intel --syms FILENAME > FILENAME.s` command.
+
+###### Cross-assemble
+- clang in macOS automatically prepends global symbol with underscore.
+- Cross-assemble was not possible by inconsistent symbol name.
+- Used NASM macro pre-define and multi-line macro to resolve the issue.
+
 ##### 1. strlen
 ---
-function signature: `size_t strlen(const char *s);`
-	returns difference of bytes between `s` and an address containing first null terminator.
+Function signature: `size_t strlen(const char *s);`
+	Returns difference of bytes between `s` and an address containing first null terminator.
 ###### size_t
 - `size_t` is defined as `unsigned long` according to `machine/types.h` of macOS SDK.
 - C implementation in this machine uses [LP64](https://unix.org/version2/whatsnew/lp64_wp.html), which means `long int` and `unsigned long int` are 64 bits type.
-- return register will be `rax`.
+- Return register will be `rax`.
 
 ###### strlen
 - `global strlen` to set it to external symbol.
@@ -242,7 +261,7 @@ function signature: `size_t strlen(const char *s);`
 - `const` is type qualifier provided by compiler.
 - need to test how `const` affects generated assembly code.
 - `char*` is pointer type which should be 64 bits wide, because of `ptrdiff_t` being `long int`.
-- register will be `rdi`. according to [this](#calling-convention-of-system-v-amd64-abi).
+- Register will be `rdi`. according to [this](#calling-convention-of-system-v-amd64-abi).
 
 ###### sub, cmp instruction
 - minuend  - subtrahend
@@ -252,28 +271,52 @@ function signature: `size_t strlen(const char *s);`
 - example `mov al, byte [rsp]`
 
 ###### symbol `_strlen`
-- symbol `strlen` is automatically prepended by `_` clang when main function is compiled. 
-- use `_strlen` as symbol name.
-- why does this happen?
-- gcc option has [-fleading-underscore](https://gcc.gnu.org/onlinedocs/gcc-4.4.0/gcc/Code-Gen-Options.html#index-fleading_002dunderscore-1989) and its counterpart -fno-leading-underscore. clang does not have this option and it seems to use leading underscore by default.
+- Symbol `strlen` is automatically prepended by `_` clang when main function is compiled. 
+- Use `_strlen` as symbol name.
+- Why does this happen?
+- GCC option has [-fleading-underscore](https://gcc.gnu.org/onlinedocs/gcc-4.4.0/gcc/Code-Gen-Options.html#index-fleading_002dunderscore-1989) and its counterpart -fno-leading-underscore. clang does not have this option and it seems to use leading underscore by default.
 - C compiler prepended underscore to generated mangled identifiers to avoid name collision between assembly code and c code that have same symbol?
 [Stack overflow - What is the reason function names are prefixed with an underscore by the compiler](https://stackoverflow.com/questions/5908568/what-is-the-reason-function-names-are-prefixed-with-an-underscore-by-the-compile)
 
 ##### 2. strcpy
 ---
-function signature: `char * strcpy(char * dst, const char * src);`
-	return `dst` and copy `[src, src_end)` bytes to `[dst, dst + src_end - src)` where `src_end` contains first null-terminator.
+Function signature: `char * strcpy(char * dst, const char * src);`
+	Return `dst` and copy `[src, src_end)` bytes to `[dst, dst + src_end - src)` where `src_end` contains first null-terminator.
 
-###### ret bug
+###### `ret` instruction bug
 - `ret` instruction in strcpy acts like `ret` in main function, which means the process exits if strcpy returns.
 - `mov rsp, rbp` -> `mov rbp, rsp`
-- the top of the stack pointed to the stack frame of main function.
+- The top of the stack pointed to the stack frame of main function.
 
 ##### 3. strcmp
 ---
-function signature: `int strcmp(const char * s1, const char * s2);`
-	return difference between first unmatched characters from each null-terminated string.
+Function signature: `int strcmp(const char * s1, const char * s2);`
+	Return difference between first unmatched characters from each null-terminated string.
 
+###### segmentation fault
+```
+loop:
+  ...
+  cmp   dl, 0
+  setz  al
+  ; int a = (dl == 0);
+  cmp   cl, 0
+  setz  al
+  ; a = (cl == 0);
+  cmp   dl, cl
+  setne al
+  ; a = (dl != cl);
+  cmp   al, 1
+  jne   loop
+```
+Value of `al` depends on `dl != cl` only. assignment to `a` must be bitwise OR assignment.
 ##### 4. strdup
 ---
-function signature: `char * strdup(const char * s);`
+Function signature: `char * strdup(const char * s);`
+	Returns newly allocated null-terminated string which is a copy of the parameter `s`.
+
+##### 5. read
+---
+
+##### 6. write
+---
