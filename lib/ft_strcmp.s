@@ -1,9 +1,12 @@
+%include "set_symbol.mac"
+  set_symbol ft_strcmp
+
   section .text
-  global ft_strcmp
+  global symbol_
   align 16
 
 ; int strcmp(const char * s1, const char * s2);
-ft_strcmp:
+symbol_:
   push  rbp
   mov   rbp, rsp
   xor   edx, edx

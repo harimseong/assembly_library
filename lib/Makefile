@@ -1,13 +1,15 @@
 NAME		= libasm.a
+UNAME		= $(shell uname)
+TESTNAME= tester_$(UNAME)
 
 
 CC			= clang
 CFLAGS	= -g
 
 AS			= nasm
-ASFLAGS = 
+ASFLAGS = -d$(UNAME)=1
 
-LD			= clang
+LD			= ld
 LDFLAGS = -pie
 
 AR			= ar
@@ -19,8 +21,6 @@ SRC			= ft_strlen.s \
 					ft_strcmp.s
 OBJ			= $(SRC:%.s=%.o)
 
-UNAME		= $(shell uname)
-TESTNAME= tester_$(UNAME)
 
 ifeq ($(UNAME), Darwin)
 CFLAGS	+= --target=x86_64-macos-darwin-macho
