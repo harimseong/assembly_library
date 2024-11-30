@@ -1,9 +1,9 @@
   section .text
-  global _ft_strlen
+  global ft_strlen
   align 16
 
 ; size_t ft_strlen(const char* s);
-_ft_strlen:
+ft_strlen:
   ; new base pointer
   push  rbp
   mov   rbp, rsp

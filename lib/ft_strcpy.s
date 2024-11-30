@@ -1,9 +1,9 @@
   section .text
-  global _ft_strcpy
+  global ft_strcpy
   align 16
 
 ; char * ft_strcpy(char * dst, const char * src);
-_ft_strcpy:
+ft_strcpy:
   push  rbp
   mov   rbp, rsp
   mov   rax, rdi

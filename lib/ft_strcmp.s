@@ -1,11 +1,13 @@
   section .text
-  global _ft_strcmp
+  global ft_strcmp
   align 16
 
 ; int strcmp(const char * s1, const char * s2);
-_ft_strcmp:
+ft_strcmp:
   push  rbp
   mov   rbp, rsp
+  xor   edx, edx
+  xor   ecx, ecx
 
 loop:
   mov   dl, [rdi]
@@ -14,14 +16,21 @@ loop:
   inc   rsi
   cmp   dl, 0
   setz  al
-  cmp   cl, 0
-  setz  al
-  cmp   dl, cl
-  jnz   loop
 
-  xor   rax, rax
-  sub   dl, cl
-  mov   al, dl
+  cmp   cl, 0
+  setz  r8b
+  or    al, r8b
+
+  cmp   dl, cl
+  setne r8b
+  or    al, r8b
+
+  cmp   al, 0
+  je    loop
+
+  xor   eax, eax
+  sub   edx, ecx
+  mov   eax, edx
 
   pop   rbp
   ret
