@@ -268,3 +268,12 @@ function signature: `char * strcpy(char * dst, const char * src);`
 - `ret` instruction in strcpy acts like `ret` in main function, which means the process exits if strcpy returns.
 - `mov rsp, rbp` -> `mov rbp, rsp`
 - the top of the stack pointed to the stack frame of main function.
+
+##### 3. strcmp
+---
+function signature: `int strcmp(const char * s1, const char * s2);`
+	return difference between first unmatched characters from each null-terminated string.
+
+##### 4. strdup
+---
+function signature: `char * strdup(const char * s);`
