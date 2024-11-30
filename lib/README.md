@@ -92,8 +92,9 @@ Things I know partially or can relate to something I know already are:
 	[OS X Assembler Reference - Directives for Dead-Code Stripping](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)
 	It tells static link editor that the sections of the object file can be divided into individual blocks.
 
-- `.section	__TEXT,__text,regular,pure_instructions
-	[OS X Assembler Reference - Directives for Designating the Current Section](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html),
+- `.section	__TEXT,__text,regular,pure_instructions`
+  	
+	[OS X Assembler Reference - Directives for Designating the Current Section](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)
 	`.section  segname, sectname [[[, type], attribute], sizeof_stub]
 	segname = \_\_TEXT\_\_
 	sectname = \_\_text
@@ -110,11 +111,13 @@ Things I know partially or can relate to something I know already are:
 	assume it is miscellaneous directive because generated assembly code targeted to specific architecture already.
 
 - `.globl _main`
+  	
 	[OS X Assembler Reference - Directives for Dealing With Symbol](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html),
 	`.globl  symbol_name`
 	This directive makes symbol_name external.
 
 - `.p2align  4, 0x90`
+  	
 	[OS X Assembler Reference - Directives for Moving the Location Counter](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html),
 	`.p2align  align_expression [, 1_byte_fill_expression [, max_bytes_to_fill]]`
 	align location counter to 2^{align_expression} bytes and fill space between current and next location counter with {1_byte_fill_expression}.
