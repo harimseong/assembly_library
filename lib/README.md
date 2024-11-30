@@ -28,8 +28,7 @@ main function is required to test these functions.
 - UNIX system call interface (read and write)
 - Intel assembly language syntax
 - file format (Mach-O for macOS) possibly?
-
-
+<br/><br/>
 ## Phase 1: Understand Assembly
 
 #### 1. Generate assembly of simple c program to understand basic assembly.
@@ -80,7 +79,7 @@ Things I know partially or can relate to something I know already are:
 - `.build_version ...`
 - `.globl _main`
 - `.p2align ...`
-
+<br/><br/>
 #### 1-1. Learn Assemble Directives
 
 - ##### CFI (Call Frame Information)
@@ -134,7 +133,7 @@ Things I know partially or can relate to something I know already are:
 [NASM - Output Formats - Mach Object ](https://www.nasm.us/xdoc/2.16.03/html/nasmdoc8.html#section-8.8)
 [GAS - Sections and Relocation](https://ftp.gnu.org/old-gnu/Manuals/gas/html_chapter/as_4.html#SEC39)
 [GAS - .section name](https://ftp.gnu.org/old-gnu/Manuals/gas/html_chapter/as_7.html#SEC119)
-
+<br/><br/>
 #### 2. Interpret the Assembly Code
 
 Compiled `simple.c` with 
@@ -184,8 +183,7 @@ _main:
 - Callee saved: `rbx, rsp, rbp, r12, r13, r14, r15`
 - Caller saved: function parameters + `r10, r11`
 - Return: `rax`
-
-
+<br/><br/>
 ##### Instructions
 [x86_64 cheatsheet in AT&T syntax](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf)\
 Intel assembly instruction syntax: `inst [reg0, reg1, ...]`
@@ -202,8 +200,7 @@ If there are more than one register, reg0 is source register.
 	Before return, restore callee saved `rbp` from the top of the stack and increment `rsp`.
 5. `ret`\
 	Near return - jump to an address located on the top of the stack and pops it from the stack.
-
-
+<br/><br/>
 #### 3. Assemble, Link and Execute the Code
 
 - Assemble command: `nasm -f macho64 simple.s`
@@ -233,8 +230,7 @@ If there are more than one register, reg0 is source register.
 	Using `-ld_classic` is necessary to avoid warning.
 
 - Every executables generated with or without warning work as expected.
-
-
+<br/><br/>
 ## Phase 2: Start Writing Code
 
 #### 0. Makefile and Miscellaneous
@@ -253,9 +249,8 @@ If there are more than one register, reg0 is source register.
 - clang in macOS automatically prepends global symbol with underscore.
 - Cross-assemble was not possible by inconsistent symbol name.
 - Used NASM pre-defined macro and multi-line macro to resolve the issue.
-
-
-##### 1. strlen
+<br/><br/>
+#### 1. strlen
 
 Function signature: `size_t strlen(const char *s);`\
 	Returns difference of bytes between `s` and an address containing first null terminator.
@@ -298,20 +293,17 @@ Function signature: `size_t strlen(const char *s);`\
 ##### Load Effective Address
 - `lea` instruction loads effective address from source to destination. Width of destination should be larger than or equal to source.
 - It seems like that the instruction is used when source is indirection.
-
-
+<br/><br/>
 #### 2. strcpy
 
 Function signature: `char * strcpy(char * dst, const char * src);`\
 	Return `dst` and copy `[src, src_end)` bytes to `[dst, dst + src_end - src)` where `src_end` contains first null-terminator.
 
-
 ##### `ret` instruction bug
 - `ret` instruction in strcpy acts like `ret` in main function, which means the process exits if strcpy returns.
 - `mov rsp, rbp` -> `mov rbp, rsp`
 - The top of the stack pointed to the stack frame of main function.
-
-
+<br/><br/>
 #### 3. strcmp
 
 Function signature: `int strcmp(const char * s1, const char * s2);`\
@@ -335,13 +327,12 @@ loop:
   jne   loop
 ```
 Value of `al` depends on `dl != cl` only. assignment to `a` must be bitwise OR assignment.
-
+<br/><br/>
 #### 4. strdup
 
 Function signature: `char * strdup(const char * s);`\
 	Returns newly allocated null-terminated string which is a copy of the parameter `s`.
-
-
+<br/><br/>
 ### System Call
 
 System call functions like read(2) are libc function that wraps around assembly instructions. I need to rewrite those with special instructions that enters kernel space with higher privilege.
