@@ -92,12 +92,11 @@ Things I know partially or can relate to something I know already are:
 	cfi instructions is enabled by `-fasynchronous-unwind-tables` and disabled by `-fno-asynchronous-unwind-tables` compiler option.
 
 - ###### `.subsections_via_symbols`
-	[OS X Assembler Reference - Directives for Dead-Code Stripping](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)
+	[OS X Assembler Reference - Directives for Dead-Code Stripping](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)\
 	It tells static link editor that the sections of the object file can be divided into individual blocks.
 
-- `.section	__TEXT,__text,regular,pure_instructions`
-  	
-	[OS X Assembler Reference - Directives for Designating the Current Section](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)
+- ###### `.section	__TEXT,__text,regular,pure_instructions`
+	[OS X Assembler Reference - Directives for Designating the Current Section](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)\
 	`.section  segname, sectname [[[, type], attribute], sizeof_stub]`
 	
 	segname = \_\_TEXT\_\_
@@ -105,27 +104,23 @@ Things I know partially or can relate to something I know already are:
 	type = regular
 	attribute = pure_instructions
 	
-	[OS X Assembler Reference - Section Types and Attributes](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html#//apple_ref/doc/uid/TP30000823-CJBIFBJG)
+	[OS X Assembler Reference - Section Types and Attributes](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html#//apple_ref/doc/uid/TP30000823-CJBIFBJG)\
 	regular section may contain any kind of data.
 	pure_instructions means this section contains nothing but machine instructions.
 
-- `.build_version macos, 14, 5	sdk_version 14, 5`
+- `.build_version macos, 14, 5	sdk_version 14, 5`\
 	https://forums.developer.apple.com/forums/thread/736942
 	Could not find any document containing this assembler directive.
 	Assume it is miscellaneous directive because generated assembly code targeted to specific architecture already.
 
-- `.globl _main`
-  	
-	[OS X Assembler Reference - Directives for Dealing With Symbol](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html),
-	`.globl  symbol_name`
-	
+- `.globl _main`\
+	[OS X Assembler Reference - Directives for Dealing With Symbol](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)\
+	`.globl  symbol_name`\
 	This directive makes symbol_name external.
 
-- `.p2align  4, 0x90`
-  	
-	[OS X Assembler Reference - Directives for Moving the Location Counter](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html),
-	`.p2align  align_expression [, 1_byte_fill_expression [, max_bytes_to_fill]]`
-	
+- `.p2align  4, 0x90`\
+	[OS X Assembler Reference - Directives for Moving the Location Counter](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)\
+	`.p2align  align_expression [, 1_byte_fill_expression [, max_bytes_to_fill]]`\
 	Align location counter to 2^{align_expression} bytes and fill space between current and next location counter with {1_byte_fill_expression}.
 	If bytes of the space is equal to or larger than {max_bytes_to_fill}, this directive does nothing.
 
@@ -184,7 +179,7 @@ _main:
 - Return: `rax`
 
 ###### Instructions
-[x86_64 cheatsheet in AT&T syntax](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf)
+[x86_64 cheatsheet in AT&T syntax](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf)\
 Intel assembly instruction syntax: `inst [reg0, reg1, ...]`
 If there are more than one register, reg0 is source register.
 1. `push rbp`
@@ -205,25 +200,25 @@ If there are more than one register, reg0 is source register.
 - Assemble command: `nasm -f macho64 simple.s`
 
 - Link command with `clang`: `clang simple.o -target=x86_64-apple-darwin-macho`
-	`ld: warning: no platform load command found in '/Users/hseong/assembly_practice/lib/simple_nasm.o', assuming: macOS`
+	`ld: warning: no platform load command found in '/Users/hseong/assembly_practice/lib/simple_nasm.o', assuming: macOS`\
 	warning disappears if `-Wl,-ld_classic` is appended to the command.
 	`ld-classic` can be found in macOS man page
 
 - Link command with `ld`
-	`ld simple.o` 
+	`ld simple.o`\
 		error: `Missing -platform_version option`
 	
-	`ld simple.o -platform_version macos 14.5 14.5`
+	`ld simple.o -platform_version macos 14.5 14.5`\
 		warning: `no platform load command found in '/Users/hseong/assembly_practice/lib/simple_nasm.o', assuming: macOS`
 	
-	`ld simple.o -platform_version macos 14.5 14.5 -ld_classic`
-		error: `dynamic executables or dylibs must link with libSystem.dylib for architecture x86_64`
+	`ld simple.o -platform_version macos 14.5 14.5 -ld_classic`\
+		error: `dynamic executables or dylibs must link with libSystem.dylib for architecture x86_64`\
 		Check implicit linker option that working command `clang simple.o -target=x86_64-apple-darwin-macho -v` passed to `ld` by using `-v` `clang` option.
 	
-	`ld simple.o -platform_version macos 14.5 14.5 -ld_classic -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -lSystem`
+	`ld simple.o -platform_version macos 14.5 14.5 -ld_classic -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -lSystem`\
 		this command works without warning and error.
 	
-	`ld simple.o -ld_classic`
+	`ld simple.o -ld_classic`\
 		this command works fine.
 	
 	Using `-ld_classic` is necessary to avoid warning.
@@ -250,7 +245,7 @@ If there are more than one register, reg0 is source register.
 
 ##### 1. strlen
 
-Function signature: `size_t strlen(const char *s);`
+Function signature: `size_t strlen(const char *s);`\
 	Returns difference of bytes between `s` and an address containing first null terminator.
 ###### size_t
 - `size_t` is defined as `unsigned long` according to `machine/types.h` of macOS SDK.
@@ -287,7 +282,7 @@ Function signature: `size_t strlen(const char *s);`
 
 ##### 2. strcpy
 
-Function signature: `char * strcpy(char * dst, const char * src);`
+Function signature: `char * strcpy(char * dst, const char * src);`\
 	Return `dst` and copy `[src, src_end)` bytes to `[dst, dst + src_end - src)` where `src_end` contains first null-terminator.
 
 ###### `ret` instruction bug
@@ -297,7 +292,7 @@ Function signature: `char * strcpy(char * dst, const char * src);`
 
 ##### 3. strcmp
 
-Function signature: `int strcmp(const char * s1, const char * s2);`
+Function signature: `int strcmp(const char * s1, const char * s2);`\
 	Return difference between first unmatched characters from each null-terminated string.
 
 ###### segmentation fault
@@ -319,7 +314,7 @@ loop:
 Value of `al` depends on `dl != cl` only. assignment to `a` must be bitwise OR assignment.
 ##### 4. strdup
 
-Function signature: `char * strdup(const char * s);`
+Function signature: `char * strdup(const char * s);`\
 	Returns newly allocated null-terminated string which is a copy of the parameter `s`.
 
 #### System Call
@@ -333,18 +328,18 @@ System call functions like read(2) are libc function that wraps around assembly 
 - There are `libsystem_kernel.dylib`, `libsystem_platform.dylib`, `libsystem_pthread.dylib`. platform and pthread libraries are related to concurrency and kernel library contains the others including system call such as read, write.
 
 ###### System call table
-[Blog Post - FreeBSD 15 System Calls Table](https://alfonsosiciliano.gitlab.io/posts/2023-08-28-freebsd-15-system-calls.html)
-[syscall master file - sys/kern/syscalls.master](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/syscalls.master)
-[syscall declaration - lib/libsys/\_libsys.h](https://github.com/freebsd/freebsd-src/blob/main/lib/libsys/_libsys.h)
-[syscall number - sys/sys/syscall.h](https://github.com/freebsd/freebsd-src/blob/main/sys/sys/syscall.h)
-[syscall creation library - syscsys/tools/syscalls](https://github.com/freebsd/freebsd-src/tree/main/sys/tools/syscalls)
+[Blog Post - FreeBSD 15 System Calls Table](https://alfonsosiciliano.gitlab.io/posts/2023-08-28-freebsd-15-system-calls.html)\
+[syscall master file - sys/kern/syscalls.master](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/syscalls.master)\
+[syscall declaration - lib/libsys/\_libsys.h](https://github.com/freebsd/freebsd-src/blob/main/lib/libsys/_libsys.h)\
+[syscall number - sys/sys/syscall.h](https://github.com/freebsd/freebsd-src/blob/main/sys/sys/syscall.h)\
+[syscall creation library - syscsys/tools/syscalls](https://github.com/freebsd/freebsd-src/tree/main/sys/tools/syscalls)\
 [macOS BSD syscall and trap creation](https://github.com/dyjakan/osx-syscalls-list/tree/master)
 
 ###### System call flow
-[Trap handling - sys/i386/i386/exception.S](https://github.dev/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)
-[syscall\(\), trap\(\) - sys/i386/i386/trap.c](https://github.dev/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)
-[Trap types - sys/x86/include/trap.h](https://github.com/freebsd/freebsd-src/blob/main/sys/x86/include/trap.h)
-[syscallenter\(\) - sys/kern/subr_syscall.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/subr_syscall.c)
+[Trap handling - sys/i386/i386/exception.S](https://github.dev/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)\
+[syscall\(\), trap\(\) - sys/i386/i386/trap.c](https://github.dev/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)\
+[Trap types - sys/x86/include/trap.h](https://github.com/freebsd/freebsd-src/blob/main/sys/x86/include/trap.h)\
+[syscallenter\(\) - sys/kern/subr_syscall.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/subr_syscall.c)\
 [sys\_read\(\) - sys/kern/sys_generic.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/sys_generic.c)
 
 I need to trigger system call trap with system call number. 
