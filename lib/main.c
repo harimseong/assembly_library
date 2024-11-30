@@ -14,19 +14,23 @@
 
 void test_strlen(void);
 void test_strcpy(void);
-
-#define MAX_CASE (5)
+void test_strcmp(void);
 
 static struct testcase
 {
   char*   string;
-} cases[MAX_CASE] = {
+} cases[] = {
   "",
   " ",
   "                 ",
   "1\n2",
   "abc",
+  "lorem ipsum",
+  "lorem\0ipsum",
+  "\0abc",
+  "a\0bc",
 };
+
 static size_t n_case;
 
 int main(int argc, char** argv)
@@ -34,6 +38,7 @@ int main(int argc, char** argv)
   n_case = sizeof(cases) / sizeof(cases[0]);
   test_strlen();
   test_strcpy();
+  test_strcmp();
   return 0;
 }
 
@@ -69,6 +74,25 @@ void test_strcpy(void)
     }
     is_fail = 1;
     break;
+  }
+  TEST_RESULT(is_fail);
+}
+
+void test_strcmp(void)
+{
+  int is_fail = 0;
+
+  for (int i = 0; i < n_case; ++i) {
+    for (int j = 0; j < n_case; ++j) {
+      char* s0 = cases[i].string;
+      char* s1 = cases[j].string;
+
+      if (strcmp(s0, s1) == ft_strcmp(s0, s1)) {
+        continue;
+      }
+      is_fail = 1;
+      break;
+    }
   }
   TEST_RESULT(is_fail);
 }
