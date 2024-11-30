@@ -338,6 +338,7 @@ System call functions like read(2) are libc function that wraps around assembly 
 [syscall declaration - lib/libsys/\_libsys.h](https://github.com/freebsd/freebsd-src/blob/main/lib/libsys/_libsys.h)
 [syscall number - sys/sys/syscall.h](https://github.com/freebsd/freebsd-src/blob/main/sys/sys/syscall.h)
 [syscall creation library - syscsys/tools/syscalls](https://github.com/freebsd/freebsd-src/tree/main/sys/tools/syscalls)
+[macOS BSD syscall and trap creation](https://github.com/dyjakan/osx-syscalls-list/tree/master)
 
 ###### System call flow
 [Trap handling - sys/i386/i386/exception.S](https://github.dev/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)
