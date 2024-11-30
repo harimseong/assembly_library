@@ -240,13 +240,13 @@ If there are more than one register, reg0 is source register.
 - Use `uname` command to decide build environment (e.g. OS and architecture) and assemble & link options.
 
 ###### tester
-- Add tester target that compile main function and test functions and link them with the library.
+- Add tester target that compiles main function and test functions and links them with the library.
 - Examine final machine code by executing `objdump --disassemble --disassembler-options=intel --syms FILENAME > FILENAME.s` command.
 
 ###### Cross-assemble
 - clang in macOS automatically prepends global symbol with underscore.
 - Cross-assemble was not possible by inconsistent symbol name.
-- Used NASM macro pre-define and multi-line macro to resolve the issue.
+- Used NASM pre-defined macro and multi-line macro to resolve the issue.
 
 ##### 1. strlen
 
@@ -329,9 +329,24 @@ System call functions like read(2) are libc function that wraps around assembly 
 - macOS system libraries are linked with linker option `-lSystem -syslibroot PATH`.
 - `find PATH -name 'libSystem*'` command lists `usr/lib/libSystem.tbd` and similar names.
 - `.tbd` is text-based sub libraries according to [a stack overflow post](https://stackoverflow.com/questions/31450690/why-xcode-7-shows-tbd-instead-of-dylib).
-- It contains actual path to binary libraries.
-- The path is `/usr/lib/system/`, but only a few libraries are found in there.
-- There are `libSystem_kernel.dylib`, `libSystem_platform.dylib`, `libSystem_pthread.dylib`. platform and pthread libraries are related to concurrency and kernel library contains the others including system call such as read, write.
+- It contains actual path `/usr/lib/system/` where binary libraries are found.
+- There are `libsystem_kernel.dylib`, `libsystem_platform.dylib`, `libsystem_pthread.dylib`. platform and pthread libraries are related to concurrency and kernel library contains the others including system call such as read, write.
+
+###### System call table
+[Blog Post - FreeBSD 15 System Calls Table](https://alfonsosiciliano.gitlab.io/posts/2023-08-28-freebsd-15-system-calls.html)
+[syscall master file - sys/kern/syscalls.master](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/syscalls.master)
+[syscall declaration - lib/libsys/\_libsys.h](https://github.com/freebsd/freebsd-src/blob/main/lib/libsys/_libsys.h)
+[syscall number - sys/sys/syscall.h](https://github.com/freebsd/freebsd-src/blob/main/sys/sys/syscall.h)
+[syscall creation library - syscsys/tools/syscalls](https://github.com/freebsd/freebsd-src/tree/main/sys/tools/syscalls)
+
+###### System call flow
+[Trap handling - sys/i386/i386/exception.S](https://github.dev/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)
+[syscall\(\), trap\(\) - sys/i386/i386/trap.c](https://github.dev/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)
+[Trap types - sys/x86/include/trap.h](https://github.com/freebsd/freebsd-src/blob/main/sys/x86/include/trap.h)
+[syscallenter\(\) - sys/kern/subr_syscall.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/subr_syscall.c)
+[sys\_read\(\) - sys/kern/sys_generic.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/sys_generic.c)
+
+I need to trigger system call trap with system call number. 
 
 ##### 5. read
 
