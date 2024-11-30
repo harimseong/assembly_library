@@ -1,0 +1,25 @@
+%macro  set_symbol  1
+
+  %ifdef Linux
+    %define %1 %1
+  %elifdef Darwin
+    %define %1 _%1
+  %else
+    %error "not supported environment"
+  %endif
+
+%endmacro
+
+%macro  global_   1
+
+  set_symbol  %1
+  global  %1
+
+%endmacro
+
+%macro  extern_   1
+
+  set_symbol  %1
+  extern  %1
+
+%endmacro
