@@ -1,9 +1,11 @@
 ## Assembly Library Project
----
+
 This document describes development process of the project.
 
-##### Requirements
 ---
+
+##### Requirements
+
 ###### Function Implementation
 
 This project aims at re-writing following functions in assembly language.
@@ -21,16 +23,16 @@ main function is required to test these functions.
 - Requires system call error handling (e.g. errno)
 
 ##### Expected Knowledges
----
+
 - x86 instructions
 - UNIX system call interface (read and write)
 - Intel assembly language syntax
 - file format (Mach-O for macOS) possibly?
 
 ### Phase 1: Understand Assembly
----
+
 ##### 1. Generate assembly of simple c program to understand basic assembly.
----
+
 ```
 // simple.c
 int main(int argc, char** argv)
@@ -79,7 +81,7 @@ Things I know partially or can relate to something I know already are:
 - `.p2align ...`
 
 ##### 1-1. Learn Assemble Directives
----
+
 - ###### CFI (Call Frame Information)
 	reference
 	https://sourceware.org/binutils/docs/as/CFI-directives.html
@@ -133,7 +135,7 @@ Things I know partially or can relate to something I know already are:
 [GAS - .section name](https://ftp.gnu.org/old-gnu/Manuals/gas/html_chapter/as_7.html#SEC119)
 
 ##### 2. Interpret the Assembly Code
-___
+
 Compiled `simple.c` with 
 `clang simple.c -S -mllvm --x86-asm-syntax=intel -O3 --target=x86_64-apple-darwin-macho -fno-asynchronous-unwind-tables`
 
@@ -199,7 +201,7 @@ If there are more than one register, reg0 is source register.
 	Near return - jump to an address located on the top of the stack and pops it from the stack.
 
 ##### 3. Assemble, Link and Execute the Code
-___
+
 - Assemble command: `nasm -f macho64 simple.s`
 
 - Link command with `clang`: `clang simple.o -target=x86_64-apple-darwin-macho`
@@ -227,11 +229,12 @@ ___
 	Using `-ld_classic` is necessary to avoid warning.
 
 - Every executables generated with or without warning work as expected.
+---
 
 ### Phase 2: Start Writing Code
----
+
 ##### 0. Makefile and Miscellaneous
----
+
 ###### Requirements
 - There are mandatory targets `LIBRARY_NAME, all, clean, fclean, re`.
 - Use `uname` command to decide build environment (e.g. OS and architecture) and assemble & link options.
@@ -246,7 +249,7 @@ ___
 - Used NASM macro pre-define and multi-line macro to resolve the issue.
 
 ##### 1. strlen
----
+
 Function signature: `size_t strlen(const char *s);`
 	Returns difference of bytes between `s` and an address containing first null terminator.
 ###### size_t
@@ -278,8 +281,12 @@ Function signature: `size_t strlen(const char *s);`
 - C compiler prepended underscore to generated mangled identifiers to avoid name collision between assembly code and c code that have same symbol?
 [Stack overflow - What is the reason function names are prefixed with an underscore by the compiler](https://stackoverflow.com/questions/5908568/what-is-the-reason-function-names-are-prefixed-with-an-underscore-by-the-compile)
 
+###### Load Effective Address
+- `lea` instruction loads effective address from source to destination. Width of destination should be larger than or equal to source.
+- It seems like that the instruction is used when source is indirection.
+
 ##### 2. strcpy
----
+
 Function signature: `char * strcpy(char * dst, const char * src);`
 	Return `dst` and copy `[src, src_end)` bytes to `[dst, dst + src_end - src)` where `src_end` contains first null-terminator.
 
@@ -289,7 +296,7 @@ Function signature: `char * strcpy(char * dst, const char * src);`
 - The top of the stack pointed to the stack frame of main function.
 
 ##### 3. strcmp
----
+
 Function signature: `int strcmp(const char * s1, const char * s2);`
 	Return difference between first unmatched characters from each null-terminated string.
 
@@ -311,12 +318,31 @@ loop:
 ```
 Value of `al` depends on `dl != cl` only. assignment to `a` must be bitwise OR assignment.
 ##### 4. strdup
----
+
 Function signature: `char * strdup(const char * s);`
 	Returns newly allocated null-terminated string which is a copy of the parameter `s`.
 
+#### System Call
+
+System call functions like read(2) are libc function that wraps around assembly instructions. I need to rewrite those with special instructions that enters kernel space with higher privilege.
+
+- macOS system libraries are linked with linker option `-lSystem -syslibroot PATH`.
+- `find PATH -name 'libSystem*'` command lists `usr/lib/libSystem.tbd` and similar names.
+- `.tbd` is text-based sub libraries according to [a stack overflow post](https://stackoverflow.com/questions/31450690/why-xcode-7-shows-tbd-instead-of-dylib).
+- It contains actual path to binary libraries.
+- The path is `/usr/lib/system/`, but only a few libraries are found in there.
+- There are `libSystem_kernel.dylib`, `libSystem_platform.dylib`, `libSystem_pthread.dylib`. platform and pthread libraries are related to concurrency and kernel library contains the others including system call such as read, write.
+
 ##### 5. read
----
+
 
 ##### 6. write
+
+
 ---
+
+### Phase 3: Improve and Verify
+
+##### 1. Improvement candidates
+
+1. align width

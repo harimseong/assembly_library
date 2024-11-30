@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "libasm.h"
 
@@ -113,8 +114,11 @@ void test_strdup(void)
     char* string = cases[i].string;
     char* p0 = strdup(string);
     char* p1 = ft_strdup(string);
+    int result = strcmp(p0, p1) == 0 && ft_strcmp(p0, p1) == 0;
 
-    if (strcmp(p0, p1) == 0 && ft_strcmp(p0, p1) == 0) {
+    free(p0);
+    free(p1);
+    if (result) {
       continue;
     }
     is_fail = 1;
