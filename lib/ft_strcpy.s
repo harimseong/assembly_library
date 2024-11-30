@@ -1,12 +1,10 @@
-%include "set_symbol.mac"
-  set_symbol ft_strcpy
-
+%include "symbol.mac"
   section .text
-  global symbol_
+  global_ ft_strcpy
   align 16
 
 ; char * ft_strcpy(char * dst, const char * src);
-symbol_:
+ft_strcpy:
   push  rbp
   mov   rbp, rsp
   mov   rax, rdi

@@ -15,6 +15,9 @@
 void test_strlen(void);
 void test_strcpy(void);
 void test_strcmp(void);
+void test_strdup(void);
+
+unsigned long int num = 0x3547982347823948;
 
 static struct testcase
 {
@@ -29,6 +32,10 @@ static struct testcase
   "lorem\0ipsum",
   "\0abc",
   "a\0bc",
+  "\0\0\0\0",
+  "\0\0a\0\0b\0\0c",
+  "\0\0\0\0abc",
+  (char*)&num
 };
 
 static size_t n_case;
@@ -39,6 +46,7 @@ int main(int argc, char** argv)
   test_strlen();
   test_strcpy();
   test_strcmp();
+  test_strdup();
   return 0;
 }
 
@@ -93,6 +101,24 @@ void test_strcmp(void)
       is_fail = 1;
       break;
     }
+  }
+  TEST_RESULT(is_fail);
+}
+
+void test_strdup(void)
+{
+  int is_fail = 0;
+
+  for (int i = 0; i < n_case; ++i) {
+    char* string = cases[i].string;
+    char* p0 = strdup(string);
+    char* p1 = ft_strdup(string);
+
+    if (strcmp(p0, p1) == 0 && ft_strcmp(p0, p1) == 0) {
+      continue;
+    }
+    is_fail = 1;
+    break;
   }
   TEST_RESULT(is_fail);
 }

@@ -1,12 +1,10 @@
-%include "set_symbol.mac"
-  set_symbol ft_strlen
-
+%include "symbol.mac"
   section .text
-  global symbol_
+  global_ ft_strlen
   align 16
 
 ; size_t ft_strlen(const char* s);
-symbol_:
+ft_strlen:
   ; new base pointer
   push  rbp
   mov   rbp, rsp
