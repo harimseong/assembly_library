@@ -1,6 +1,6 @@
 ## Assembly Library Project
 ---
-This document describes a process to accomplish the project. 
+This document describes development process of the project.
 
 ##### Requirements
 ---
@@ -95,7 +95,7 @@ Things I know partially or can relate to something I know already are:
 - `.section	__TEXT,__text,regular,pure_instructions`
   	
 	[OS X Assembler Reference - Directives for Designating the Current Section](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)
-	`.section  segname, sectname [[[, type], attribute], sizeof_stub]
+	`.section  segname, sectname [[[, type], attribute], sizeof_stub]`
 	segname = \_\_TEXT\_\_
 	sectname = \_\_text
 	type = regular
