@@ -15,7 +15,9 @@ This project aims at re-writing following functions in assembly language.
 - strdup(3)
 - read(2)
 - write(2)
+
 Makefile is required to build a library consists of the functions.
+
 main function is required to test these functions.
 #### Constraints
 - Conforms to System V AMD64 ABI calling convention.
@@ -27,7 +29,11 @@ main function is required to test these functions.
 - x86 instructions
 - UNIX system call interface (read and write)
 - Intel assembly language syntax
-- file format (Mach-O for macOS) possibly?
+- file format (Mach-O, ELF) to understand the structure of the machine code
+
+#### Environment
+- Apple M3, macOS 15
+- Intel CPU, WSL2 Ubuntu 24.04
 <br/><br/>
 ## Phase 1: Understand Assembly
 
@@ -82,7 +88,7 @@ Things I know partially or can relate to something I know already are:
 <br/><br/>
 #### 1-1. Learn Assemble Directives
 
-- ##### CFI (Call Frame Information)
+##### CFI (Call Frame Information)
 	reference
 	https://sourceware.org/binutils/docs/as/CFI-directives.html
 	
@@ -92,18 +98,18 @@ Things I know partially or can relate to something I know already are:
 	cfi instructions is enabled by `-fasynchronous-unwind-tables` and disabled by `-fno-asynchronous-unwind-tables` compiler option.
 
 
-- ##### `.subsections_via_symbols`
+##### `.subsections_via_symbols`
 	[OS X Assembler Reference - Directives for Dead-Code Stripping](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)\
 	It tells static link editor that the sections of the object file can be divided into individual blocks.
 
 
-- ##### `.section	__TEXT,__text,regular,pure_instructions`
+##### `.section	__TEXT,__text,regular,pure_instructions`
 	[OS X Assembler Reference - Directives for Designating the Current Section](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)\
 	`.section  segname, sectname [[[, type], attribute], sizeof_stub]`
 	
-	segname = \_\_TEXT\_\_
-	sectname = \_\_text
-	type = regular
+	segname = \_\_TEXT\_\_\
+	sectname = \_\_text\
+	type = regular\
 	attribute = pure_instructions
 	
 	[OS X Assembler Reference - Section Types and Attributes](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html#//apple_ref/doc/uid/TP30000823-CJBIFBJG)\
@@ -111,19 +117,19 @@ Things I know partially or can relate to something I know already are:
 	pure_instructions means this section contains nothing but machine instructions.
 
 
-- ##### `.build_version macos, 14, 5	sdk_version 14, 5`
+##### `.build_version macos, 14, 5	sdk_version 14, 5`
 	https://forums.developer.apple.com/forums/thread/736942
 	Could not find any document containing this assembler directive.
 	Assume it is miscellaneous directive because generated assembly code targeted to specific architecture already.
 
 
-- ##### `.globl _main`
+##### `.globl _main`
 	[OS X Assembler Reference - Directives for Dealing With Symbol](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)\
 	`.globl  symbol_name`\
 	This directive makes symbol_name external.
 
 
-- ##### `.p2align  4, 0x90`
+##### `.p2align  4, 0x90`
 	[OS X Assembler Reference - Directives for Moving the Location Counter](https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/Assembler/040-Assembler_Directives/asm_directives.html)\
 	`.p2align  align_expression [, 1_byte_fill_expression [, max_bytes_to_fill]]`\
 	Align location counter to 2^{align_expression} bytes and fill space between current and next location counter with {1_byte_fill_expression}.
@@ -286,7 +292,7 @@ Function signature: `size_t strlen(const char *s);`\
 - Use `_strlen` as symbol name.
 - Why does this happen?
 - GCC option has [-fleading-underscore](https://gcc.gnu.org/onlinedocs/gcc-4.4.0/gcc/Code-Gen-Options.html#index-fleading_002dunderscore-1989) and its counterpart -fno-leading-underscore. clang does not have this option and it seems to use leading underscore by default.
-- C compiler prepended underscore to generated mangled identifiers to avoid name collision between assembly code and c code that have same symbol?
+- C compiler prepend underscore to generated mangled identifiers to avoid name collision between assembly code and c code that have same symbol.
 [Stack overflow - What is the reason function names are prefixed with an underscore by the compiler](https://stackoverflow.com/questions/5908568/what-is-the-reason-function-names-are-prefixed-with-an-underscore-by-the-compile)
 
 
@@ -300,7 +306,7 @@ Function signature: `char * strcpy(char * dst, const char * src);`\
 	Return `dst` and copy `[src, src_end)` bytes to `[dst, dst + src_end - src)` where `src_end` contains first null-terminator.
 
 ##### `ret` instruction bug
-- `ret` instruction in strcpy acts like `ret` in main function, which means the process exits if strcpy returns.
+- `ret` instruction in strcpy was working as if it's `ret` in main function, which means the process exits if strcpy returns.
 - `mov rsp, rbp` -> `mov rbp, rsp`
 - The top of the stack pointed to the stack frame of main function.
 <br/><br/>
@@ -360,7 +366,7 @@ System call functions like read(2) are libc function that wraps around assembly 
 [syscallenter\(\) - sys/kern/subr_syscall.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/subr_syscall.c)\
 [sys\_read\(\) - sys/kern/sys_generic.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/sys_generic.c)
 
-System call trap is triggered with syscall instruction and system call number stored in rax. 
+System call trap is triggered with syscall instruction and system call number stored in rax determine which system call is executed. 
 
 #### 5. read
 
@@ -375,3 +381,4 @@ System call trap is triggered with syscall instruction and system call number st
 
 1. align width
 2. -ld_classic
+3. const qualifier
