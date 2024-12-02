@@ -356,12 +356,12 @@ System call functions like read(2) are libc function that wraps around assembly 
 [syscall declaration - lib/libsys/\_libsys.h](https://github.com/freebsd/freebsd-src/blob/main/lib/libsys/_libsys.h)\
 [syscall number - sys/sys/syscall.h](https://github.com/freebsd/freebsd-src/blob/main/sys/sys/syscall.h)\
 [syscall creation library - syscsys/tools/syscalls](https://github.com/freebsd/freebsd-src/tree/main/sys/tools/syscalls)\
-[macOS BSD syscall and trap creation](https://github.com/dyjakan/osx-syscalls-list/tree/master)
+[XNU syscall master file - bsd/kern/syscalls.master](https://github.com/opensource-apple/xnu/blob/master/bsd/kern/syscalls.master)
 
 
 ##### System call flow
-[Trap handling - sys/i386/i386/exception.S](https://github.dev/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)\
-[syscall\(\), trap\(\) - sys/i386/i386/trap.c](https://github.dev/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)\
+[Trap handling - sys/i386/i386/exception.S](https://github.com/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)\
+[syscall\(\), trap\(\) - sys/i386/i386/trap.c](https://github.com/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)\
 [Trap types - sys/x86/include/trap.h](https://github.com/freebsd/freebsd-src/blob/main/sys/x86/include/trap.h)\
 [syscallenter\(\) - sys/kern/subr_syscall.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/subr_syscall.c)\
 [sys\_read\(\) - sys/kern/sys_generic.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/sys_generic.c)
