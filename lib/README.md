@@ -345,10 +345,40 @@ System call functions like read(2) are libc function that wraps around assembly 
 
 - macOS system libraries are linked with linker option `-lSystem -syslibroot PATH`.
 - `find PATH -name 'libSystem*'` command lists `usr/lib/libSystem.tbd` and similar names.
-- `.tbd` is text-based sub libraries according to [a stack overflow post](https://stackoverflow.com/questions/31450690/why-xcode-7-shows-tbd-instead-of-dylib).
+- `.tbd` is text-based stub libraries according to [a stack overflow post](https://stackoverflow.com/questions/31450690/why-xcode-7-shows-tbd-instead-of-dylib).
 - It contains actual path `/usr/lib/system/` where binary libraries are found.
 - There are `libsystem_kernel.dylib`, `libsystem_platform.dylib`, `libsystem_pthread.dylib`. platform and pthread libraries are related to concurrency and kernel library contains the others including system call such as read, write.
-
+- `libsystem_kernel.dylib` contains user-level assembly code that is written in Apple's custom ISA based on ARMv8-A(until M3).
+- user-space `read` implementation acquired from a command `objdump --disassemble -t libsystem_kernal.dylib`
+###### `read`
+```
+_read:
+    1da0:	70 00 80 d2	mov	x16, #3
+	; system call number
+    1da4:	01 10 00 d4	svc	#0x80
+	; SuperVisor Call
+    1da8:	e3 00 00 54	b.lo	0x1dc4
+	; branch unsigned lower: branch if Carry = 0 in status register
+    1dac:	fd 7b bf a9	stp	x29, x30, [sp, #-16]!
+	; store pair of registers, x29 at [sp - 16] and x30 at [sp - 8] and set sp = sp - 16.
+    1db0:	fd 03 00 91	mov	x29, sp
+	; store sp
+    1db4:	00 03 00 94	bl	_cerror
+	; branch and link, similar to x86 call
+    1db8:	bf 03 00 91	mov	sp, x29
+	; restore sp
+    1dbc:	fd 7b c1 a8	ldp	x29, x30, [sp], #16
+	; load pair of register
+    1dc0:	c0 03 5f d6	ret
+    1dc4:	c0 03 5f d6	ret
+	; duplicate ret instructions?
+```
+- \_\_TSD\_ERRNO: Thread Specific Data errno?
+- FLEH: First Level Exception Handler
+- SLEH: Second Level Exception Handler
+##### Reference
+[Arm A-profile A64 Instruction Set Architecture](https://developer.arm.com/documentation/ddi0602/2024-09)
+[Apple-OSS-Distributions XNU](https://github.com/apple-oss-distributions/xnu/tree/main)
 
 ##### System call table
 [Blog Post - FreeBSD 15 System Calls Table](https://alfonsosiciliano.gitlab.io/posts/2023-08-28-freebsd-15-system-calls.html)\

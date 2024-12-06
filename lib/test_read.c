@@ -13,5 +13,5 @@ void test_read(void)
   pipe(fd_set);
 
   t_pipe_fd*  pipe_fd = (t_pipe_fd*)&fd_set;
-  write(fd_set[1])
+  write(pipe_fd->write, )
 }
