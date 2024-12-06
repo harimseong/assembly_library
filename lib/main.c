@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <string.h>
+#include <strings.h>
 #include <stdlib.h>
 
 #include "libasm.h"
@@ -17,6 +17,7 @@ void test_strlen(void);
 void test_strcpy(void);
 void test_strcmp(void);
 void test_strdup(void);
+void test_read(void);
 
 unsigned long int num = 0x3547982347823948;
 
@@ -48,6 +49,7 @@ int main(int argc, char** argv)
   test_strcpy();
   test_strcmp();
   test_strdup();
+  // test_read();
   return 0;
 }
 
@@ -125,4 +127,35 @@ void test_strdup(void)
     break;
   }
   TEST_RESULT(is_fail);
+}
+
+void test_read(void)
+{
+  int  fd_set[2];
+  char buffer0[1024];
+  char buffer1[1024];
+
+  pipe(fd_set);
+
+  struct s_pipe_fd
+  {
+    int read;
+    int write;
+  } * pipe_fd = (void*)&fd_set;
+
+  for (int i = 0; i < n_case; ++i) {
+    char* string = cases[i].string;
+    size_t len = strlen(string);
+    int ret_read0;
+    int ret_read1;
+
+    bzero(buffer0, sizeof(buffer0) / (sizeof(buffer0[0]));
+    bzero(buffer1, sizeof(buffer1) / (sizeof(buffer1[0]));
+
+    write(pipe_fd->write, string, len);
+    ret_read0 = read(pipe_fd->read, buffer, len);
+
+    write(pipe_fd->write, string, len);
+    ret_read1 = ft_read(pipe_fd->read, buffer, len);
+  }
 }
