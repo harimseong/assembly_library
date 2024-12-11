@@ -349,7 +349,7 @@ System call functions like read(2) are libc function that wraps around assembly 
 - It contains actual path `/usr/lib/system/` where binary libraries are found.
 - There are `libsystem_kernel.dylib`, `libsystem_platform.dylib`, `libsystem_pthread.dylib`. platform and pthread libraries are related to concurrency and kernel library contains the others including system call such as read, write.
 - `libsystem_kernel.dylib` contains user-level assembly code that is written in Apple's custom ISA based on ARMv8-A(until M3).
-- user-space `read` implementation acquired from a command `objdump --disassemble -t libsystem_kernal.dylib`
+- user-space `read` implementation is acquired from a command `objdump --disassemble -t libsystem_kernal.dylib`
 ###### `read`
 ```
 _read:
@@ -373,34 +373,34 @@ _read:
     1dc4:	c0 03 5f d6	ret
 	; duplicate ret instructions?
 ```
-- \_\_TSD\_ERRNO: Thread Specific Data errno?
+##### Reference
+[Exceptions on macOS](https://karol-mazurek.medium.com/exceptions-on-macos-2c4bd6a9fd31)\
+[Arm A-profile A64 Instruction Set Architecture](https://developer.arm.com/documentation/ddi0602/2024-09)\
+[Mac OS X and iOS Internals](https://newosxbook.com/home.html)\
+
+##### XNU system call
+[syscall table creation script - xnu/bsd/kern/makesyscalls.sh](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/kern/makesyscalls.sh)\
+[syscall master file - xnu/kern/syscalls.master](https://github.com/opensource-apple/xnu/blob/master/bsd/kern/syscalls.master)
+[interrupt\(\), kernel_trap\(\), user_trap\(\) - xnu/osfmk/i386/trap.c](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/i386/trap.c)\
+[trap types - xnu/osfmk/i386/trap.h](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/i386/trap.h)\
+[system call classes - xnu/osfmk/mach/i386/syscall_sw.](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/mach/i386/syscall_sw.h)
+[unix_syscall\(\) - xnu/bsd/dev/i386/systemcalls.c](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/dev/i386/systemcalls.c)\
+[read\(\) - xnu/bsd/kern/sys_generic.c](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/kern/sys_generic.c)
+
+- TSD: Thread Specific Data
 - FLEH: First Level Exception Handler
 - SLEH: Second Level Exception Handler
-##### Reference
-[Arm A-profile A64 Instruction Set Architecture](https://developer.arm.com/documentation/ddi0602/2024-09)
-[Apple-OSS-Distributions XNU](https://github.com/apple-oss-distributions/xnu/tree/main)
 
-##### System call table
-[Blog Post - FreeBSD 15 System Calls Table](https://alfonsosiciliano.gitlab.io/posts/2023-08-28-freebsd-15-system-calls.html)\
-[syscall master file - sys/kern/syscalls.master](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/syscalls.master)\
-[syscall declaration - lib/libsys/\_libsys.h](https://github.com/freebsd/freebsd-src/blob/main/lib/libsys/_libsys.h)\
-[syscall number - sys/sys/syscall.h](https://github.com/freebsd/freebsd-src/blob/main/sys/sys/syscall.h)\
-[syscall creation library - syscsys/tools/syscalls](https://github.com/freebsd/freebsd-src/tree/main/sys/tools/syscalls)\
-[XNU syscall master file - bsd/kern/syscalls.master](https://github.com/opensource-apple/xnu/blob/master/bsd/kern/syscalls.master)
-
-
-##### System call flow
-[Trap handling - sys/i386/i386/exception.S](https://github.com/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)\
-[syscall\(\), trap\(\) - sys/i386/i386/trap.c](https://github.com/freebsd/freebsd-src/blob/main/sys/i386/i386/trap.c)\
-[Trap types - sys/x86/include/trap.h](https://github.com/freebsd/freebsd-src/blob/main/sys/x86/include/trap.h)\
-[syscallenter\(\) - sys/kern/subr_syscall.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/subr_syscall.c)\
-[sys\_read\(\) - sys/kern/sys_generic.c](https://github.com/freebsd/freebsd-src/blob/main/sys/kern/sys_generic.c)
-
-System call trap is triggered with syscall instruction and system call number stored in rax determine which system call is executed. 
-
+System call trap is triggered with syscall instruction and trap handler uses system call number stored in `rax` that determines system call to be executed. 
+<br/><br/>
 #### 5. read
 
+Function signature: `ssize_t read(int fd, void* buf, size_t nbyte);`
+	returns number of bytes written to buffer, or -1 if an error occurs and global variable `errno` that represents error number is set.
 
+XNU read system call trap requires 
+
+<br/><br/>
 #### 6. write
 
 
