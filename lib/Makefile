@@ -4,7 +4,7 @@ TESTNAME= tester_$(UNAME)
 
 # for tester compile
 CC			= clang
-CFLAGS	=
+CFLAGS	= -g
 
 AS			= nasm
 ASFLAGS = -d$(UNAME)=1
@@ -31,9 +31,11 @@ ASFLAGS += -f macho64
 LDFLAGS += -ld_classic -lSystem \
 					-syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 else
-CFLAGS	+= -g --target=x86_64-linux-gnu-elf64
+CFLAGS	+= --target=x86_64-linux-gnu
 ASFLAGS += -f elf64
-LDFLAGS += /lib/x86_64-linux-gnu/Scrt1.o -L/usr/lib/x86_64-linux-gnu -lc
+LDFLAGS += -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
+					 /lib/x86_64-linux-gnu/Scrt1.o \
+					 -L/usr/lib/x86_64-linux-gnu -lc
 endif
 
 TESTSRC = main.c

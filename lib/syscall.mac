@@ -1,6 +1,5 @@
 %macro unix_syscall 1
 
-  ; NOTE: mov rax? eax?
   %ifdef Linux
     mov   eax, %1
     syscall

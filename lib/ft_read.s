@@ -1,5 +1,4 @@
 %include "symbol.mac"
-%include "syscall.mac"
 %include "errno.mac"
   global_ ft_read
   extern  get_errno_
@@ -13,14 +12,32 @@ ft_read:
   push  r11
   mov   rbp, rsp
 
-  unix_syscall 3
+%ifdef Linux
+  mov   eax, 0
+  syscall
+  cmp   rax, 0
+  jge   exit
+
+  push  rax
+  call  get_errno_
+  pop   rdi
+  neg   rdi
+  mov   [rax], rdi
+  mov   rax, -1
+
+%elifdef Darwin
+  mov   eax, 3
+  syscall
   jnc   exit
 
   push  rax
   call  get_errno_
-  pop   rsi
-  mov   [rax], esi
+  pop   rdi
+  mov   [rax], edi
   mov   rax, -1
+%else
+  %error "environment not supported"
+%endif
 exit:
   pop   r11
   pop   rcx
