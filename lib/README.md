@@ -398,7 +398,13 @@ System call trap is triggered with syscall instruction and trap handler uses sys
 Function signature: `ssize_t read(int fd, void* buf, size_t nbyte);`
 	returns number of bytes written to buffer, or -1 if an error occurs and global variable `errno` that represents error number is set.
 
-XNU read system call trap requires 
+NASM REL keyword and position independent code
+
+`errno` definition in `sys/errno.h`
+```
+extern int * __error(void);
+#define errno (*__error())
+```
 
 <br/><br/>
 #### 6. write

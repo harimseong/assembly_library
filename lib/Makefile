@@ -2,7 +2,7 @@ NAME		= libasm.a
 UNAME		= $(shell uname)
 TESTNAME= tester_$(UNAME)
 
-
+# for tester compile
 CC			= clang
 CFLAGS	= -g
 
@@ -49,7 +49,7 @@ $(OBJ): %.o: %.s
 
 tester: $(NAME) $(TESTOBJ)
 	$(LD) $(LDFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
-	objdump --disassemble --disassembler-options=intel -t $(TESTNAME) > $(TESTNAME).s
+	objdump --disassemble --disassembler-options=intel -t -s $(TESTNAME) > $(TESTNAME).s
 
 $(TESTOBJ): %.o: %.c
 	$(CC) $(CFLAGS) -c $<
