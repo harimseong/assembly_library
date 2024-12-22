@@ -4,13 +4,13 @@ TESTNAME= tester_$(UNAME)
 
 # for tester compile
 CC			= clang
-CFLAGS	= -g
+CFLAGS	=
 
 AS			= nasm
 ASFLAGS = -d$(UNAME)=1
 
 LD			= ld
-LDFLAGS = -pie
+LDFLAGS =
 
 AR			= ar
 ARFLAGS = -r
@@ -31,9 +31,9 @@ ASFLAGS += -f macho64
 LDFLAGS += -ld_classic -lSystem \
 					-syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 else
-CFLAGS	+= --target=x86_64-linux-gnu-elf64
+CFLAGS	+= -g --target=x86_64-linux-gnu-elf64
 ASFLAGS += -f elf64
-LDFLAGS += 
+LDFLAGS += /lib/x86_64-linux-gnu/Scrt1.o -L/usr/lib/x86_64-linux-gnu -lc
 endif
 
 TESTSRC = main.c

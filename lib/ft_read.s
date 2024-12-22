@@ -1,7 +1,8 @@
 %include "symbol.mac"
 %include "syscall.mac"
+%include "errno.mac"
   global_ ft_read
-  extern  ___error
+  extern  get_errno_
   align 16
   section .text
 
@@ -16,7 +17,7 @@ ft_read:
   jnc   exit
 
   push  rax
-  call  ___error
+  call  get_errno_
   pop   rsi
   mov   [rax], esi
   mov   rax, -1
