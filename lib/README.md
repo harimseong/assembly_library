@@ -400,11 +400,31 @@ Function signature: `ssize_t read(int fd, void* buf, size_t nbyte);`
 
 NASM REL keyword and position independent code
 
-`errno` definition in `sys/errno.h`
+###### `errno` definition in `sys/errno.h`
 ```
 extern int * __error(void);
 #define errno (*__error())
 ```
+
+###### `___error`
+```
+___error:
+    1bf0:	68 d0 3b d5	mrs	x8, TPIDRRO_EL0
+	; mrs: Move to Register from Special register
+	; TPIDR_EL0 register contains pointer to thread-local storage
+    1bf4:	08 05 40 f9	ldr	x8, [x8, #8]
+	; load thread-local variable
+    1bf8:	09 02 00 f0	adrp	x9, 67 ; 0x44000
+	; set x9 to address(0x44000) of page the label belongs to
+    1bfc:	29 01 02 91	add	x9, x9, #128
+    1c00:	1f 01 00 f1	cmp	x8, #0
+    1c04:	20 01 88 9a	csel	x0, x9, x8, eq
+	; csel: Conditional Select
+	; x0 = eq ? x9 : x8
+    1c08:	c0 03 5f d6	ret
+```
+
+[Thread Local Storage](https://fuchsia.dev/fuchsia-src/development/kernel/threads/tls)
 
 <br/><br/>
 #### 6. write

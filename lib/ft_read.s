@@ -2,7 +2,6 @@
 %include "syscall.mac"
   global_ ft_read
   extern  ___error
-  extern _printf
   align 16
   section .text
 
@@ -21,20 +20,9 @@ ft_read:
   call  ___error
   pop   rsi
   mov   [rax], esi
-
-  mov   rcx, [rax]
-  mov   rdx, rsi
-  mov   rsi, rax
-  lea   rdi, [rel str]
-  call  _printf
-
   mov   rax, -1
-
 exit:
   pop   r11
   pop   rcx
   pop   rbp
   ret
-
-  section .data
-str: db "addr=%p, value(esi)=%d, value([rax])=%d", 10, 0

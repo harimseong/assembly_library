@@ -1,3 +1,5 @@
+#include <sys/errno.h>
+
 #include <stdio.h>
 #include <strings.h>
 #include <stdlib.h>
@@ -20,7 +22,6 @@ void test_strdup(void);
 void test_read_normal(void);
 void test_read_fd_error(void);
 
-extern int errno;
 unsigned long int g_random_num = 0x3547982347823948;
 
 static struct testcase
@@ -150,8 +151,8 @@ void test_read_normal(void)
   for (int i = 0; i < n_case; ++i) {
     char*   string = cases[i].string;
     size_t  len = strlen(string);
-    ssize_t ret_read0;
-    ssize_t ret_read1;
+    ssize_t ret0;
+    ssize_t ret1;
     int errno0;
     int errno1;
 
@@ -159,16 +160,19 @@ void test_read_normal(void)
     bzero(buffer1, sizeof(buffer1) / (sizeof(buffer1[0])));
 
     write(pipe_fd->write, string, len);
-    ret_read0 = read(pipe_fd->read, buffer0, len);
-    errno0 = errno;
+    ret0 = read(pipe_fd->read, buffer0, len);
+    errno0 = *__error();
+
+    *__error() = 0;
 
     write(pipe_fd->write, string, len);
-    ret_read1 = ft_read(pipe_fd->read, buffer1, len);
-    errno1 = errno;
+    ret1 = ft_read(pipe_fd->read, buffer1, len);
+    errno1 = *__error();
 
-    if (strcmp(buffer0, buffer1) == 0 && errno0 == errno1) {
+    if (strcmp(buffer0, buffer1) == 0 && errno0 == errno1 && ret0 == ret1) {
       continue;
     }
+    printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
     is_fail = 1;
     break;
   }
@@ -191,15 +195,14 @@ void test_read_fd_error(void)
     ssize_t ret1;
 
     ret0 = read(fd_case[i], buffer, 7);
-    errno0 = errno;
+    errno0 = *__error();
 
-    write(0, 0, -1);
+    *__error() = 0;
 
     ret1 = ft_read(fd_case[i], buffer, 7);
-    errno1 = errno;
+    errno1 = *__error();
 
     if (errno0 == errno1 && ret0 == ret1) {
-      printf("%s(%d)\n", strerror(errno0), errno1);
       continue;
     }
     printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
