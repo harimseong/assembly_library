@@ -21,7 +21,7 @@ void test_strcpy(void);
 void test_strcmp(void);
 void test_strdup(void);
 void test_read_normal(void);
-void test_read_fd_error(void);
+void test_read_error(void);
 
 char* g_long_string;
 size_t g_long_string_len = 0;
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
   test_strcmp();
   test_strdup();
   test_read_normal();
-  test_read_fd_error();
+  test_read_error();
   return 0;
 }
 
@@ -179,13 +179,13 @@ void test_read_normal(void)
 
     write(pipe_fd->write, string, len);
     ret0 = read(pipe_fd->read, buffer0, len);
-    errno0 = *__error();
+    errno0 = errno;
 
-    *__error() = 0;
+    errno = 0;
 
     write(pipe_fd->write, string, len);
     ret1 = ft_read(pipe_fd->read, buffer1, len);
-    errno1 = *__error();
+    errno1 = errno;
 
     if (strcmp(buffer0, buffer1) == 0 && errno0 == errno1 && ret0 == ret1) {
       continue;
@@ -198,7 +198,7 @@ void test_read_normal(void)
   TEST_RESULT(is_fail);
 }
 
-void test_read_fd_error(void)
+void test_read_error(void)
 {
   int   is_fail;
   int   fd_case[] = {
@@ -214,12 +214,12 @@ void test_read_fd_error(void)
     ssize_t ret1;
 
     ret0 = read(fd_case[i], buffer, 7);
-    errno0 = *__error();
+    errno0 = errno;
 
-    *__error() = 0;
+    errno = 0;
 
     ret1 = ft_read(fd_case[i], buffer, 7);
-    errno1 = *__error();
+    errno1 = errno;
 
     if (errno0 == errno1 && ret0 == ret1) {
       continue;
@@ -228,6 +228,38 @@ void test_read_fd_error(void)
     printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
     is_fail = 1;
     break;
+  }
+  int     errno0;
+  int     errno1;
+  ssize_t ret0;
+  ssize_t ret1;
+
+  ret0 = read(0, buffer, -1);
+  errno0 = errno;
+
+  errno = 0;
+
+  ret1 = ft_read(0, buffer, -1);
+  errno1 = errno;
+
+  if (errno0 != errno1 || ret0 != ret1) {
+    printf("a: ");
+    printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
+    is_fail = 1;
+  }
+
+  ret0 = read(0, buffer, 0x100000001);
+  errno0 = errno;
+
+  errno = 0;
+
+  ret1 = ft_read(0, buffer, 0x100000001);
+  errno1 = errno;
+
+  if (errno0 != errno1 || ret0 != ret1) {
+    printf("b: ");
+    printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
+    is_fail = 1;
   }
   TEST_RESULT(is_fail);
 }
