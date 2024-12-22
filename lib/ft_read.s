@@ -13,8 +13,7 @@ ft_read:
   mov   rbp, rsp
 
   unix_syscall 3
-  cmp   rax, 0
-  jz    exit
+  jnc   exit
 
   push  rax
   call  ___error

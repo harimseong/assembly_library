@@ -1,5 +1,6 @@
 #include <sys/errno.h>
 
+#include <limits.h>
 #include <stdio.h>
 #include <strings.h>
 #include <stdlib.h>
@@ -22,6 +23,8 @@ void test_strdup(void);
 void test_read_normal(void);
 void test_read_fd_error(void);
 
+char* g_long_string;
+size_t g_long_string_len = 0;
 unsigned long int g_random_num = 0x3547982347823948;
 
 static struct testcase
@@ -40,14 +43,22 @@ static struct testcase
   "\0\0\0\0",
   "\0\0a\0\0b\0\0c",
   "\0\0\0\0abc",
-  (char*)&g_random_num
+  (char*)&g_random_num,
+  NULL
 };
 
 static size_t n_case;
 
 int main(int argc, char** argv)
 {
+  g_long_string = malloc(g_long_string_len + 2);
+
+  memset(g_long_string, 'a', g_long_string_len + 2);
+  g_long_string[g_long_string_len + 1] = 0;
+
   n_case = sizeof(cases) / sizeof(cases[0]);
+  cases[n_case - 1] = (struct testcase){g_long_string};
+
   test_strlen();
   test_strcpy();
   test_strcmp();
@@ -82,6 +93,9 @@ void test_strcpy(void)
   for (int i = 0; i < n_case; ++i) {
     const char* string = cases[i].string;
 
+    if (string == g_long_string) {
+      continue;
+    }
     strcpy(buffer1, string);
     ft_strcpy(buffer2, string);
     if (strcmp(buffer1, buffer2) == 0) {
@@ -150,6 +164,10 @@ void test_read_normal(void)
 
   for (int i = 0; i < n_case; ++i) {
     char*   string = cases[i].string;
+
+    if (string == g_long_string) {
+      continue;
+    }
     size_t  len = strlen(string);
     ssize_t ret0;
     ssize_t ret1;
@@ -172,6 +190,7 @@ void test_read_normal(void)
     if (strcmp(buffer0, buffer1) == 0 && errno0 == errno1 && ret0 == ret1) {
       continue;
     }
+    printf("%d: ", i + 1);
     printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
     is_fail = 1;
     break;
@@ -205,6 +224,7 @@ void test_read_fd_error(void)
     if (errno0 == errno1 && ret0 == ret1) {
       continue;
     }
+    printf("%d: ", i + 1);
     printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
     is_fail = 1;
     break;

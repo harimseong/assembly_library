@@ -358,7 +358,7 @@ _read:
     1da4:	01 10 00 d4	svc	#0x80
 	; SuperVisor Call
     1da8:	e3 00 00 54	b.lo	0x1dc4
-	; branch unsigned lower: branch if Carry = 0 in status register
+	; branch unsigned lower: branch if Carry = 0 (unsigned lower) in status register
     1dac:	fd 7b bf a9	stp	x29, x30, [sp, #-16]!
 	; store pair of registers, x29 at [sp - 16] and x30 at [sp - 8] and set sp = sp - 16.
     1db0:	fd 03 00 91	mov	x29, sp
@@ -384,7 +384,7 @@ _read:
 [interrupt\(\), kernel_trap\(\), user_trap\(\) - xnu/osfmk/i386/trap.c](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/i386/trap.c)\
 [trap types - xnu/osfmk/i386/trap.h](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/i386/trap.h)\
 [system call classes - xnu/osfmk/mach/i386/syscall_sw.](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/mach/i386/syscall_sw.h)
-[unix_syscall\(\) - xnu/bsd/dev/i386/systemcalls.c](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/dev/i386/systemcalls.c)\
+[unix\_syscall\(\) - xnu/bsd/dev/i386/systemcalls.c](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/dev/i386/systemcalls.c)\
 [read\(\) - xnu/bsd/kern/sys_generic.c](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/kern/sys_generic.c)
 
 - TSD: Thread Specific Data
@@ -398,8 +398,7 @@ System call trap is triggered with syscall instruction and trap handler uses sys
 Function signature: `ssize_t read(int fd, void* buf, size_t nbyte);`
 	returns number of bytes written to buffer, or -1 if an error occurs and global variable `errno` that represents error number is set.
 
-NASM REL keyword and position independent code
-
+NASM 'rel' keyword and position independent code
 ###### `errno` definition in `sys/errno.h`
 ```
 extern int * __error(void);
@@ -423,8 +422,10 @@ ___error:
 	; x0 = eq ? x9 : x8
     1c08:	c0 03 5f d6	ret
 ```
-
 [Thread Local Storage](https://fuchsia.dev/fuchsia-src/development/kernel/threads/tls)
+
+According to [syscall functions in xnu/bsd/dev/i386/systemcalls.c](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/dev/i386/systemcalls.c), carry bit in FLAGS register is set if an error has occurred during system call.
+Check carry bit to decide whether return the number of byte read or set errno and return -1.
 
 <br/><br/>
 #### 6. write
