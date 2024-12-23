@@ -20,7 +20,8 @@ SRC			= ft_strlen.s \
 					ft_strcpy.s \
 					ft_strcmp.s \
 					ft_strdup.s \
-					ft_read.s
+					ft_read.s \
+					ft_write.s
 
 OBJ			= $(SRC:%.s=%.o)
 
@@ -31,7 +32,7 @@ ASFLAGS += -f macho64
 LDFLAGS += -ld_classic -lSystem \
 					-syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 else
-CFLAGS	+= --target=x86_64-linux-gnu
+CFLAGS	+= --target=x86_64-linux-gnu-elf64
 ASFLAGS += -f elf64
 LDFLAGS += -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
 					 /lib/x86_64-linux-gnu/Scrt1.o \

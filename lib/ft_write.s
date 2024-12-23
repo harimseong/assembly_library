@@ -1,23 +1,23 @@
 %include "symbol.mac"
 %include "errno.mac"
-  global_   ft_read
+  global_   ft_write
   extern    get_errno_
   align     16
   section   .text
 
-; ssize_t read(int fd, void* buf, size_t nbyte);
-ft_read:
+; ssize_t write(int fd, void* buf, size_t nbyte);
+ft_write:
   push  rbp
   mov   rbp, rsp
 
 %ifdef Linux
-  mov   rax, 0
+  mov   rax, 1
   syscall
   cmp   rax, 0
   jge   exit
   neg   rax
 %elifdef Darwin
-  mov   rax, 0x2000003
+  mov   rax, 0x2000004
   syscall
   jnc   exit
 %else

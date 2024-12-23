@@ -427,6 +427,8 @@ ___error:
 According to [syscall functions in xnu/bsd/dev/i386/systemcalls.c](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/dev/i386/systemcalls.c), carry bit in FLAGS register is set if an error has occurred during system call.
 Check carry bit to decide whether return the number of byte read or set errno and return -1.
 
+[Linux kernel x86_64 system call table - linux/arch/x86/entry/syscalls/syscall_64.tbl](https://github.com/torvalds/linux/blob/master/arch/x86/entry/syscalls/syscall_64.tbl)
+Linux x86_64 system call return value is stored at `rax`. If it has negative value, it is system call error and equals to `-errno`.
 <br/><br/>
 #### 6. write
 

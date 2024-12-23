@@ -4,7 +4,7 @@
 
 int main(void)
 {
-  char b;
-  read(0, &b, 1); 
-  return 0;
+  char b = 'a';
+  ssize_t ret = write(1, &b, 0); 
+  return ret;
 }
