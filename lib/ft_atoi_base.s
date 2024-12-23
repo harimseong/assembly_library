@@ -1,14 +1,16 @@
 %include "symbol.mac"
   global_   ft_atoi_base
+  extern_   ft_strlen
   align     16
   section   .text
 
 ; int ft_atoi_base(char* str, char* base);
 ft_atoi_base:
   push  rbp
+  push  rbx
   mov   rbp, rsp
 
-  sub   rsp, 16
+  sub   rsp, 24
   mov   [rsp + 8], rsi
   mov   [rsp], rdi
 
@@ -16,23 +18,32 @@ ft_atoi_base:
   call  verify_base
   cmp   rax, 1
   jbe   error
+  mov   rbx, rax
 
   mov   rdi, rsp
-  mov   rsi, [rsp + 8]
   call  decide_sign
-  cmp   al, 0
-  je    error
+  mov   [rsp + 16], al
 
-; relase stack frame
+  mov   rdi, [rsp]
+  mov   rsi, [rsp + 8]
+  mov   rdx, rbx
+  call  calc_sum
+
+  cmp   [rsp + 16], 0
+  je    ret
+  neg   rax
+  jmp   ret
 error:
   xor   eax, eax
 ret:
+; relase stack frame
   mov   rsp, rbp
+  pop   rbx
   pop   rbp
   ret
 
 ; size_t verify_base(char* base);
-; return length of base or 0 for invalid base
+; return the length of base or 0 for invalid base
 verify_base:
   push  rbp
   push  rbx
@@ -103,9 +114,11 @@ is_delim:
 is_delim_ret:
   ret
 
-; char decide_sign(char** strptr, char* base);
+; unsigned char decide_sign(char** strptr);
 decide_sign:
-  mov   rcx, rdi   ; rcx = baseptr
+  push  rbx
+
+  mov   rbx, rdi ; [rsp] = baseptr
   mov   rdx, [rdi] ; rdx = *baseptr
 
   dec   rdx
@@ -116,17 +129,49 @@ decide_sign_loop0:
   cmp   al, 0
   jne   decide_sign_loop0
 
+  xor   rax, rax
+
   dec   rdx
 decide_sign_loop1:
   inc   rdx
   mov   dil, [rdx]
-  cmp   dil, 0
-  sete  sil
-
   cmp   dil, 45 ; '-'
+  sete  sil
+  add   rax, sil
+
+  cmp   dil, 43 ; '+'
+  sete  cl
+  or    sil, cl
+  cmp   sil, 1
+  je    decide_sign_loop1
 
 decide_sign_exit:
-  mov   [rdi], rdx
+  and   al, 1
+  mov   [rbx], rdx
+  pop   rbx
+  ret
+
+; size_t calc_sum(char* str, char* base, size_t base_len);
+calc_sum:
+  push  rbp
+  push  rbx
+  push  r12
+  mov   rbp, rsp
+
+  sub   rsp, 32
+  mov   [rsp], rdi
+  mov   [rsp + 8], rsi
+
+calc_sum_loop:
+  mov   dil, [rcx]
+  mov   rsi, [rdx]
+  call  is_base
+
+calc_sum_ret:
+  mov   rsp, rbp
+  pop   r12
+  pop   rbx
+  pop   rbp
   ret
 
 ; unsigned char is_base(char c, char* base);
