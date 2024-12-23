@@ -6,10 +6,8 @@
 
 ; char * strdup(const char * s);
 ft_strdup:
-  push  rbp
   push  r12
   push  r13
-  mov   rbp, rsp
   mov   r12, rdi
 
 loop0:
@@ -36,5 +34,4 @@ loop1:
 
   pop   r13
   pop   r12
-  pop   rbp
   ret

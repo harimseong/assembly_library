@@ -433,7 +433,6 @@ Linux x86_64 system call return value is stored at `rax`. If it has negative val
 #### 6. write
 
 
-
 ## Phase 3: Improve and Verify
 
 #### 1. Improvement candidates

@@ -5,8 +5,6 @@
 
 ; char * ft_strcpy(char * dst, const char * src);
 ft_strcpy:
-  push  rbp
-  mov   rbp, rsp
   mov   rax, rdi
 
 loop:
@@ -17,5 +15,4 @@ loop:
   cmp   dl, 0
   jnz   loop
 
-  pop   rbp
   ret

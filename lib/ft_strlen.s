@@ -5,10 +5,6 @@
 
 ; size_t ft_strlen(const char* s);
 ft_strlen:
-  ; new base pointer
-  push  rbp
-  mov   rbp, rsp
-
   ; copy rdi.
   mov   rax, rdi
   dec   rax
@@ -25,5 +21,4 @@ loop:
 
   sub   rax, rdi
 
-  pop   rbp
   ret

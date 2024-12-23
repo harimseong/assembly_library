@@ -5,8 +5,6 @@
 
 ; int strcmp(const char * s1, const char * s2);
 ft_strcmp:
-  push  rbp
-  mov   rbp, rsp
   xor   edx, edx
   xor   ecx, ecx
 
@@ -33,5 +31,4 @@ loop:
   sub   edx, ecx
   mov   eax, edx
 
-  pop   rbp
   ret
