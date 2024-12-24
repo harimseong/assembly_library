@@ -4,7 +4,7 @@ void test_strlen(void)
 {
   int is_fail = 0;
 
-  for (int i = 0; i < g_ncases; ++i) {
+  for (size_t i = 0; i < g_ncases; ++i) {
     char* string = g_cases[i].string;
 
     if (strlen(string) == ft_strlen(string)) {
@@ -22,7 +22,7 @@ void test_strcpy(void)
   char buffer2[1024];
   int is_fail = 0;
 
-  for (int i = 0; i < g_ncases; ++i) {
+  for (size_t i = 0; i < g_ncases; ++i) {
     const char* string = g_cases[i].string;
 
     if (string == g_long_string) {
@@ -43,8 +43,8 @@ void test_strcmp(void)
 {
   int is_fail = 0;
 
-  for (int i = 0; i < g_ncases; ++i) {
-    for (int j = 0; j < g_ncases; ++j) {
+  for (size_t i = 0; i < g_ncases; ++i) {
+    for (size_t j = 0; j < g_ncases; ++j) {
       char* s0 = g_cases[i].string;
       char* s1 = g_cases[j].string;
 
@@ -62,7 +62,7 @@ void test_strdup(void)
 {
   int is_fail = 0;
 
-  for (int i = 0; i < g_ncases; ++i) {
+  for (size_t i = 0; i < g_ncases; ++i) {
     char* string = g_cases[i].string;
     char* p0 = strdup(string);
     char* p1 = ft_strdup(string);

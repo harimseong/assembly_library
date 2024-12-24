@@ -2,7 +2,7 @@
 
 void test_read_normal(void)
 {
-  int   is_fail;
+  int   is_fail = 0;
   int   fd_set[2];
   char  buffer0[1024];
   char  buffer1[1024];
@@ -18,7 +18,7 @@ void test_read_normal(void)
     int write;
   } * pipe_fd = (void*)&fd_set;
 
-  for (int i = 0; i < g_ncases; ++i) {
+  for (size_t i = 0; i < g_ncases; ++i) {
     char*   string = g_cases[i].string;
 
     if (string == g_long_string) {
@@ -46,7 +46,7 @@ void test_read_normal(void)
     if (strcmp(buffer0, buffer1) == 0 && errno0 == errno1 && ret0 == ret1) {
       continue;
     }
-    printf("%d: ", i + 1);
+    printf("%lu: ", i + 1);
     printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
     is_fail = 1;
     break;
@@ -126,7 +126,7 @@ void test_read_error(void)
 
 void test_write_normal(void)
 {
-  int   is_fail;
+  int   is_fail = 0;
   int   fd_set[2];
   char  buffer0[1024];
   char  buffer1[1024];
@@ -142,7 +142,7 @@ void test_write_normal(void)
     int write;
   } * pipe_fd = (void*)&fd_set;
 
-  for (int i = 0; i < g_ncases; ++i) {
+  for (size_t i = 0; i < g_ncases; ++i) {
     char*   string = g_cases[i].string;
 
     if (string == g_long_string) {
@@ -170,7 +170,7 @@ void test_write_normal(void)
     if (strcmp(buffer0, buffer1) == 0 && errno0 == errno1 && ret0 == ret1) {
       continue;
     }
-    printf("%d: ", i + 1);
+    printf("%ld: ", i + 1);
     printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
     is_fail = 1;
     break;

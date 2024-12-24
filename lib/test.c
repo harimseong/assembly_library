@@ -6,23 +6,23 @@ unsigned long int g_random_num = 0x3547982347823948;
 size_t g_ncases;
 
 t_testcase g_cases[] = {
-  "",
-  " ",
-  "                 ",
-  "1\n2",
-  "abc",
-  "lorem ipsum",
-  "lorem\0ipsum",
-  "\0abc",
-  "a\0bc",
-  "\0\0\0\0",
-  "\0\0a\0\0b\0\0c",
-  "\0\0\0\0abc",
-  (char*)&g_random_num,
-  NULL
+  {""},
+  {" "},
+  {"                 "},
+  {"1\n2"},
+  {"abc"},
+  {"lorem ipsum"},
+  {"lorem\0ipsum"},
+  {"\0abc"},
+  {"a\0bc"},
+  {"\0\0\0\0"},
+  {"\0\0a\0\0b\0\0c"},
+  {"\0\0\0\0abc"},
+  {(char*)&g_random_num},
+  {NULL}
 };
 
-int main(int argc, char** argv)
+int main(void)
 {
   g_long_string = malloc(g_long_string_len + 2);
 

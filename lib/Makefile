@@ -64,7 +64,7 @@ $(TESTOBJ): %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	$(RM) $(OBJ2) $(TESTOBJ)
+	$(RM) $(OBJ) $(TESTOBJ)
 
 fclean: clean
 	$(RM) $(NAME) $(TESTNAME)
