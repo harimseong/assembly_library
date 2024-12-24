@@ -1,6 +1,5 @@
 %include "symbol.mac"
   global_   ft_atoi_base
-  extern_   ft_strlen
   align     16
   section   .text
 
@@ -68,25 +67,25 @@ verify_base_loop:
 
   call  is_space ; check space
   cmp   al, 0
-  sete  cl
-
-  mov   rax, [rsp + rdi] ; check count
-  cmp   rax, 0
   sete  al
-  and   cl, al ; jump if base is invalid
+
+  mov   rsi, [rsp + 8*rdi] ; check count
+  cmp   rsi, 0
+  sete  cl
+  and   al, cl 
 
   cmp   dil, 45
-  setne al
-  and   cl, al
+  setne cl
+  and   al, cl
 
   cmp   dil, 43
-  setne al
-  and   cl, al
+  setne cl
+  and   al, cl
 
-  cmp   cl, 0
-  je    verify_base_false
+  cmp   al, 0
+  je    verify_base_false ; if base is invalid
 
-  inc   qword [rsp + rdi] ; increment
+  inc   qword [rsp + 8*rdi] ; increment
   inc   rdx
   inc   rbx
   jmp   verify_base_loop
@@ -108,24 +107,24 @@ is_space:
   setge al
   cmp   dil, 13
   setle sil
-  or    al, sil
+  and   al, sil
   cmp   dil, 32
   sete  sil
   or    al, sil
   ret
 
-; optimized is_delim
-is_delim:
-  xor   al, al
-  cmp   dil, 32
-  ja    is_delim_ret
+;optimized is_delim
+; is_delim:
+; xor   al, al
+; cmp   dil, 32
+; ja    is_delim_ret
 
-  mov   rax, 0x100003e01
-  movzx rdi, dil
-  bt    rax, rdi ;bit test: carry = bit rax[dil]
-  setc  al
-is_delim_ret:
-  ret
+; mov   rax, 0x100003e01
+; movzx rdi, dil
+; bt    rax, rdi ;bit test: carry = bit rax[dil]
+; setc  al
+;is_delim_ret:
+; ret
 ;____________________________________________________________ 
 
 
@@ -158,7 +157,7 @@ decide_sign_loop1:
   cmp   dil, 43 ; '+'
   sete  cl
   or    cl, sil
-  cmp   sil, 1
+  cmp   cl, 1
   je    decide_sign_loop1
 
 decide_sign_exit:
@@ -209,16 +208,15 @@ calc_sum_ret:
 
 ; size_t get_base_idx(char c, char* base);
 get_base_idx:
-  xor   rax, rax
+  mov   rax, rsi
 get_base_idx_loop:
-  mov   dl, [rsi]
+  mov   dl, [rax]
   cmp   dl, 0
-  setne cl  
+  je    get_base_idx_ret
   inc   rax
   cmp   dl, dil
-  setne dl
-  and   cl, dl
-  cmp   cl, 0
-  je    get_base_idx_loop
+  jne   get_base_idx_loop
 get_base_idx_ret:
+  sub   rax, rsi
+  dec   rax
   ret

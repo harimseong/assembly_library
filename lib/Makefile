@@ -42,7 +42,8 @@ endif
 TESTSRC = test.c \
 					test_str.c \
 					test_syscall.c \
-					test_atoi_base.c
+					test_atoi_base.c \
+					ft_atoi_base_ref.c
 TESTOBJ = $(TESTSRC:%.c=%.o)
 
 all: $(NAME)
