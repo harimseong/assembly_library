@@ -189,6 +189,9 @@ calc_sum_loop:
 
   mov   rsi, r12
   call  get_base_idx
+  cmp   rax, r13
+  je    calc_sum_ret
+
   imul  r14, r13
   add   r14, rax
   inc   rbx;
@@ -216,7 +219,7 @@ get_base_idx_loop:
   inc   rax
   cmp   dl, dil
   jne   get_base_idx_loop
+  dec   rax
 get_base_idx_ret:
   sub   rax, rsi
-  dec   rax
   ret
