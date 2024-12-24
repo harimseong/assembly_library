@@ -29,7 +29,7 @@ ft_atoi_base:
   mov   rdx, rbx
   call  calc_sum
 
-  cmp   [rsp + 16], 0
+  cmp   byte [rsp + 16], 0
   je    ret
   neg   rax
   jmp   ret
@@ -41,6 +41,8 @@ ret:
   pop   rbx
   pop   rbp
   ret
+;____________________________________________________________ 
+
 
 ; size_t verify_base(char* base);
 ; return the length of base or 0 for invalid base
@@ -60,23 +62,31 @@ verify_base:
 ; stosq: [rdi] = rax, rdi += 8
   
 verify_base_loop:
-  mov   dil, [rdx] ; dil = *base, null check
+  movzx rdi, byte [rdx] ; dil = *base, null check
   cmp   dil, 0
   je    verify_base_ret
 
   call  is_space ; check space
   cmp   al, 0
-  setne sil
+  sete  cl
 
-  mov   rax, [rsp + dil] ; check count
+  mov   rax, [rsp + rdi] ; check count
   cmp   rax, 0
-  setne cl
+  sete  al
+  and   cl, al ; jump if base is invalid
 
-  or    sil, cl ; jump if base is invalid
-  cmp   sil, 0
-  jne   verify_base_false
+  cmp   dil, 45
+  setne al
+  and   cl, al
 
-  inc   qword [rsp + dil] ; increment
+  cmp   dil, 43
+  setne al
+  and   cl, al
+
+  cmp   cl, 0
+  je    verify_base_false
+
+  inc   qword [rsp + rdi] ; increment
   inc   rdx
   inc   rbx
   jmp   verify_base_loop
@@ -89,6 +99,8 @@ verify_base_ret:
   pop   rbx
   pop   rbp
   ret
+;____________________________________________________________ 
+
 
 ; unsigned char is_space(char c);
 is_space:
@@ -106,20 +118,23 @@ is_space:
 is_delim:
   xor   al, al
   cmp   dil, 32
-  ja    is_forbidden_ret
+  ja    is_delim_ret
 
-  movabs  rax, 0x100003e01
-  bt    rax, dil ;bit test: carry = bit rax[dil]
+  mov   rax, 0x100003e01
+  movzx rdi, dil
+  bt    rax, rdi ;bit test: carry = bit rax[dil]
   setc  al
 is_delim_ret:
   ret
+;____________________________________________________________ 
+
 
 ; unsigned char decide_sign(char** strptr);
 decide_sign:
   push  rbx
 
-  mov   rbx, rdi ; [rsp] = baseptr
-  mov   rdx, [rdi] ; rdx = *baseptr
+  mov   rbx, rdi ; [rsp] = strptr
+  mov   rdx, [rdi] ; rdx = *strptr
 
   dec   rdx
 decide_sign_loop0:
@@ -137,11 +152,12 @@ decide_sign_loop1:
   mov   dil, [rdx]
   cmp   dil, 45 ; '-'
   sete  sil
-  add   rax, sil
+  movzx rsi, sil
+  add   rax, rsi
 
   cmp   dil, 43 ; '+'
   sete  cl
-  or    sil, cl
+  or    cl, sil
   cmp   sil, 1
   je    decide_sign_loop1
 
@@ -150,32 +166,59 @@ decide_sign_exit:
   mov   [rbx], rdx
   pop   rbx
   ret
+;____________________________________________________________ 
+
 
 ; size_t calc_sum(char* str, char* base, size_t base_len);
 calc_sum:
   push  rbp
   push  rbx
   push  r12
+  push  r13
+  push  r14
   mov   rbp, rsp
 
-  sub   rsp, 32
-  mov   [rsp], rdi
-  mov   [rsp + 8], rsi
+  mov   rbx, rdi
+  mov   r12, rsi
+  mov   r13, rdx
+  xor   r14, r14 ; r14 = 0 (sum)
 
 calc_sum_loop:
-  mov   dil, [rcx]
-  mov   rsi, [rdx]
-  call  is_base
+  mov   dil, [rbx]
+  cmp   dil, 0
+  je    calc_sum_ret
+
+  mov   rsi, r12
+  call  get_base_idx
+  imul  r14, r13
+  add   r14, rax
+  inc   rbx;
+  jmp   calc_sum_loop
 
 calc_sum_ret:
+  mov   rax, r14
   mov   rsp, rbp
+  pop   r14
+  pop   r13
   pop   r12
   pop   rbx
   pop   rbp
   ret
+;____________________________________________________________ 
 
-; unsigned char is_base(char c, char* base);
-is_base:
-  mov   dl, [rdi]
-is_base_ret:
+
+; size_t get_base_idx(char c, char* base);
+get_base_idx:
+  xor   rax, rax
+get_base_idx_loop:
+  mov   dl, [rsi]
+  cmp   dl, 0
+  setne cl  
+  inc   rax
+  cmp   dl, dil
+  setne dl
+  and   cl, dl
+  cmp   cl, 0
+  je    get_base_idx_loop
+get_base_idx_ret:
   ret

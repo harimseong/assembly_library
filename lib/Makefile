@@ -21,10 +21,10 @@ SRC			= ft_strlen.s \
 					ft_strcmp.s \
 					ft_strdup.s \
 					ft_read.s \
-					ft_write.s
+					ft_write.s \
+					ft_atoi_base.s
 
 OBJ			= $(SRC:%.s=%.o)
-
 
 ifeq ($(UNAME), Darwin)
 CFLAGS	+= --target=x86_64-macos-darwin-macho
@@ -39,7 +39,10 @@ LDFLAGS += -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
 					 -L/usr/lib/x86_64-linux-gnu -lc
 endif
 
-TESTSRC = main.c
+TESTSRC = test.c \
+					test_str.c \
+					test_syscall.c \
+					test_atoi_base.c
 TESTOBJ = $(TESTSRC:%.c=%.o)
 
 all: $(NAME)
@@ -50,6 +53,8 @@ $(NAME): $(OBJ)
 $(OBJ): %.o: %.s
 	$(AS) $(ASFLAGS) $<
 
+bonus: all
+
 tester: $(NAME) $(TESTOBJ)
 	$(LD) $(LDFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
 	objdump --disassemble --disassembler-options=intel -t -s $(TESTNAME) > $(TESTNAME).s
@@ -58,10 +63,12 @@ $(TESTOBJ): %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	$(RM) $(OBJ) $(TESTOBJ)
+	$(RM) $(OBJ2) $(TESTOBJ)
 
 fclean: clean
 	$(RM) $(NAME) $(TESTNAME)
 
 re: fclean
 	$(MAKE) all
+
+.PHONY: all clean fclean re bonus
