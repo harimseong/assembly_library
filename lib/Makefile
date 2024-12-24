@@ -1,49 +1,49 @@
-NAME		= libasm.a
-UNAME		= $(shell uname)
+NAME    = libasm.a
+UNAME   = $(shell uname)
 TESTNAME= tester_$(UNAME)
 
 # for tester compile
-CC			= clang
-CFLAGS	= -Wall -Werror -Wextra -g
+CC      = clang
+CFLAGS  = -Wall -Werror -Wextra -g
 
-AS			= nasm
+AS      = nasm
 ASFLAGS = -d$(UNAME)=1
 
-LD			= ld
+LD      = ld
 LDFLAGS =
 
-AR			= ar
+AR      = ar
 ARFLAGS = -r
 
 
-SRC			= ft_strlen.s \
-					ft_strcpy.s \
-					ft_strcmp.s \
-					ft_strdup.s \
-					ft_read.s \
-					ft_write.s \
-					ft_atoi_base.s
+SRC      = ft_strlen.s \
+           ft_strcpy.s \
+           ft_strcmp.s \
+           ft_strdup.s \
+           ft_read.s \
+           ft_write.s \
+           ft_atoi_base.s
 
-OBJ			= $(SRC:%.s=%.o)
+OBJ      = $(SRC:%.s=%.o)
 
 ifeq ($(UNAME), Darwin)
-CFLAGS	+= --target=x86_64-macos-darwin-macho
+CFLAGS  += --target=x86_64-macos-darwin-macho
 ASFLAGS += -f macho64
 LDFLAGS += -ld_classic -lSystem \
-					-syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+          -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 else
-CFLAGS	+= --target=x86_64-linux-gnu-elf64
+CFLAGS  += --target=x86_64-linux-gnu-elf64
 ASFLAGS += -f elf64
 LDFLAGS += -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
-					 /lib/x86_64-linux-gnu/Scrt1.o \
-					 -L/usr/lib/x86_64-linux-gnu -lc
+           /lib/x86_64-linux-gnu/Scrt1.o \
+           -L/usr/lib/x86_64-linux-gnu -lc
 endif
 
 TESTSRC = test.c \
-					test_str.c \
-					test_syscall.c \
-					test_atoi_base.c \
-					ft_atoi_base_ref.c
+          test_str.c \
+          test_syscall.c \
+          test_atoi_base.c \
+          ft_atoi_base_ref.c
 TESTOBJ = $(TESTSRC:%.c=%.o)
 
 all: $(NAME)
