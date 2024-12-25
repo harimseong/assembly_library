@@ -19,6 +19,9 @@ loop0:
   mov   r13, rdi
   sub   rdi, r12
   call  malloc
+  cmp   rax, 0
+  je    ret
+
   mov   rdi, rax
   xor   rsi, rsi
 
@@ -32,6 +35,7 @@ loop1:
 
   mov   byte [rdi], 0
 
+ret:
   pop   r13
   pop   r12
   ret

@@ -115,9 +115,9 @@ void test_read_error(void)
   ret1 = ft_read(0, buffer, 0x100000001);
   errno1 = errno;
 
-  printf("b: ");
-  printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
   if (errno0 != errno1 || ret0 != ret1) {
+    printf("b: ");
+    printf("%s(%d) != %s(%d) | return value %zd %zd\n", strerror(errno0), errno0, strerror(errno1), errno1, ret0, ret1);
     is_fail = 1;
   }
 #endif

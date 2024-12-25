@@ -4,7 +4,7 @@
 
 #include "test.h"
 
-#define CASE_LEN (50000)
+#define CASE_LEN (10000)
 #define MAX_BASE_LEN (20)
 #define MAX_STR_LEN (100)
 

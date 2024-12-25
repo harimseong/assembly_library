@@ -7,7 +7,7 @@ CC      = clang
 CFLAGS  = -Wall -Werror -Wextra -g
 
 AS      = nasm
-ASFLAGS = -d$(UNAME)=1
+ASFLAGS = -d$(UNAME)=1 -L${PWD}
 
 LD      = ld
 LDFLAGS =
@@ -16,13 +16,20 @@ AR      = ar
 ARFLAGS = -r
 
 
-SRC      = ft_strlen.s \
-           ft_strcpy.s \
-           ft_strcmp.s \
-           ft_strdup.s \
-           ft_read.s \
-           ft_write.s \
-           ft_atoi_base.s
+SRC      = string/strlen.s \
+           string/strcpy.s \
+           string/strcmp.s \
+           string/strdup.s \
+           syscall/read.s \
+           syscall/write.s \
+           atoi_base.s \
+           list/create_elem.s \
+           list/push_front.s \
+           list/insert_next.s \
+           list/delink.s \
+           list/size.s \
+           list/sort.s \
+           list/remove_if.s
 
 OBJ      = $(SRC:%.s=%.o)
 
@@ -43,7 +50,7 @@ TESTSRC = test.c \
           test_str.c \
           test_syscall.c \
           test_atoi_base.c \
-          ft_atoi_base_ref.c
+          atoi_base_ref.c
 TESTOBJ = $(TESTSRC:%.c=%.o)
 
 all: $(NAME)
