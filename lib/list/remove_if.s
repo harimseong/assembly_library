@@ -13,11 +13,11 @@ ft_list_remove_if:
   mov   rbp, rsp
 
   sub   rsp, 40
-  mov   [rsp], r15
-  mov   [rsp + 8], r14
+  mov   [rsp + 32], r15
+  mov   [rsp + 24], r14
   mov   [rsp + 16], r13
-  mov   [rsp + 24], r12
-  mov   [rsp + 32], rbx
+  mov   [rsp + 8], r12
+  mov   [rsp], rbx
 
   mov   rbx, rdi
   mov   r12, rsi
@@ -51,11 +51,11 @@ loop0_remove:
 ;}
 
 ret:
-  mov   r15, [rsp]
-  mov   r14, [rsp + 8]
+  mov   r15, [rsp + 32]
+  mov   r14, [rsp + 24]
   mov   r13, [rsp + 16]
-  mov   r12, [rsp + 24]
-  mov   rbx, [rsp + 32]
+  mov   r12, [rsp + 8]
+  mov   rbx, [rsp]
 
   mov   rsp, rbp
   pop   rbp

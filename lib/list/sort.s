@@ -9,5 +9,16 @@ ft_list_sort:
   push  rbp
   mov   rbp, rsp
 
+  sub   rsp, 24
+  mov   [rsp + 16], rdi
+  mov   [rsp + 8], r12
+  mov   [rsp], rbx
+
+  mov   rbx, 2
+
+
+  mov   r12, [rsp + 8]
+  mov   rbx, [rsp]
+  mov   rsp, rbp
   pop   rbp
   ret

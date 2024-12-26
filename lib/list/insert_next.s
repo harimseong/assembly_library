@@ -5,9 +5,6 @@
 
 ; void ft_list_insert_next(t_list* node, t_list* new);
 ft_list_insert_next:
-  push  rbp
-  mov   rbp, rsp
-
   test  rdi, 0
   je    ret
   test  rsi, 0
@@ -16,7 +13,5 @@ ft_list_insert_next:
   mov   rax, [rdi + 8] ; new->next = node->next
   mov   [rsi + 8], rax
   mov   [rdi + 8], rsi ; node->next = new
-
-  pop   rbp
 ret:
   ret
