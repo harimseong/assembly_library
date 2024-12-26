@@ -16,7 +16,8 @@ loop0:
   add   rdi, 8
   jmp   loop0
 loop0_end:
-  mov   qword [rdi], [rdx + 8] ; *head = (*head)->next
+  mov   rax, [rdx + 8]
+  mov   [rdi], rax ; *head = (*head)->next
 ret:
   pop   rbp
   ret

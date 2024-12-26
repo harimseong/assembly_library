@@ -13,8 +13,9 @@ ft_list_insert_next:
   test  rsi, 0
   je    ret
 
-  mov   qword [rsi + 8], [rdi + 8] ; new->next = node->next
-  mov   qword [rdi + 8], rsi ; node->next = new
+  mov   rax, [rdi + 8] ; new->next = node->next
+  mov   [rsi + 8], rax
+  mov   [rdi + 8], rsi ; node->next = new
 
   pop   rbp
 ret:
