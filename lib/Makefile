@@ -20,9 +20,10 @@ SRC      = string/strlen.s \
            string/strcpy.s \
            string/strcmp.s \
            string/strdup.s \
+           util/atoi_base.s \
+					 util/swap.s \
            syscall/read.s \
            syscall/write.s \
-           atoi_base.s \
            list/create_elem.s \
            list/push_front.s \
            list/insert_next.s \

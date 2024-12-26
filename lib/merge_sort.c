@@ -35,7 +35,7 @@ void  divide(t_num* result, t_num* array, size_t array_size)
   }
   size_t half_size = array_size >> 1;
   divide(result, array, half_size);
-  divide(result + half_size, array + half_size, half_size + (array_size & 1));
+  divide(result + half_size, array + half_size, array_size - half_size);
   memmove(array, result, array_size * sizeof(t_num));
   merge(result, array, array + half_size, array + array_size);
 }
