@@ -433,12 +433,51 @@ Linux x86_64 system call return value is stored at `rax`. If it has negative val
 #### 6. write
 
 
-## Phase 3: Improve and Verify
+## Phase 3: Implement Complex Functions
 
-#### 1. Improvement candidates
+#### 1. atoi_base
+Function signature: `int atoi_base(char* str, char* base);`
+	convert `str` to integer using `base` representing base of n-decimal number.
+	With base = "01", str will be interpreted as binary.
+	With base = "0123456789abcdef", str will be interpreted as hexadecimal number.
 
-1. align width
-2. -ld_classic
-3. const qualifier
+##### Use registers to minimize stack usage
+Many registers and function calls are required to implement complex logic. In this case, caller-saved registers need to be stored to the stack frequently.
+To avoid this, It should use callee-saved registers for persistent variables such as count, sum, etc.
+```
+push rbp
+mov  rbp, rsp
 
+sub  rsp, 8
+mov  [rsp], rbx
+xor  rbx, rbx ; use rbx to store count
 
+...
+
+mov  rax, rbx ; return count
+mov  rbx, [rsp]
+mov  rsp, rbp
+pop  rbp
+ret
+```
+
+##### `is_space` optimization
+minimize usage of `cmp` and jump instructions.
+```
+// is_space.c
+int is_space(char c)
+{
+  return (c >= 9 && c <= 13 || c == 32);
+}
+
+// is_space.s
+...
+mov rax, 1           ; a = 1;
+shr rax, rdx         ; a <<= c;
+mov rdx, 0x100000000 ; d = (1 << 32) | (0b11111 << 9);
+and rax, rdx         ; a = d & c;
+...
+```
+#### 2. list_sort
+Function signature: `void list_sort(t_list** head, int (*cmp)(void*, void*));`
+	sort linked list.
