@@ -1,8 +1,5 @@
 #include <stdlib.h>
 
-#include <stdio.h>
-#include <stdint.h>
-
 typedef struct s_list {
   void*           data;
   struct s_list*  next;
@@ -48,11 +45,8 @@ t_list**  divide(t_list** head, t_list* end, size_t size, int (*cmp)(void*, void
   for (size_t i = 0; i < half_size; ++i) {
     middle = &(*middle)->next;
   }
-//printf("\t1: size=%zu, head=%ld, middle=%ld\n", size, (long int)(*head)->data, (long int)(*middle)->data);
   middle = divide(head, *middle, half_size, cmp);
-//printf("\t2: size=%zu, head=%ld, middle=%ld\n", size, (long int)(*head)->data, (long int)(*middle)->data);
   divide(middle, end, size - half_size, cmp);
-//printf("\t3: size=%zu, head=%ld, middle=%ld\n", size, (long int)(*head)->data, (long int)(*middle)->data);
   return merge(head, middle, end, cmp);
 }
 
