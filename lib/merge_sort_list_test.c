@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#define SIZE (9)
+#define SIZE (8)
 
 typedef struct s_list {
   void*           data;
@@ -16,15 +16,17 @@ int cmp(void* l, void* r);
 
 int main(int argc, char** argv)
 {
-  t_list* head = 0;
-  t_list** ptr = &head;
+  t_list*   head = 0;
+  t_list**  ptr = &head;
+  t_num     array[SIZE] = {8, 7, 6, 5, 4, 3, 2, 1};
 
   if (argc > 1) {
     srand(atoi(argv[1]));
   }
   for (int i = 0; i < SIZE; ++i) {
     *ptr = malloc(sizeof(t_list));
-    (*ptr)->data = (void*)(rand() % 128lu);
+//  (*ptr)->data = (void*)(rand() % 128lu);
+    (*ptr)->data = (void*)(long int)array[i];
     ptr = &(*ptr)->next;
   }
   *ptr = 0;
@@ -46,6 +48,7 @@ int main(int argc, char** argv)
     if (head->data > head->next->data) {
       is_fail = 1;
     }
+    head = head->next;
   }
   if (is_fail) {
     printf("FAIL\n");
