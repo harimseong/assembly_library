@@ -8,13 +8,13 @@ ft_list_size:
   push  rbp
   mov   rbp, rsp
 
-  xor   rax, rax
+  xor   eax, eax
 ft_list_size_loop:
   cmp   rdi, 0
   je    ft_list_size_ret
 
   mov   rdi, [rdi + 8] ; head = head->next
-  inc   rax
+  inc   eax
   jmp   ft_list_size_loop
 
 ft_list_size_ret:

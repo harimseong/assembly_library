@@ -26,6 +26,7 @@ void  test_read_error(void);
 void  test_write_normal(void);
 void  test_write_error(void);
 void  test_atoi_base(void);
+void  test_list(void);
 void  test_list_sort(void);
 
 typedef struct testcase {

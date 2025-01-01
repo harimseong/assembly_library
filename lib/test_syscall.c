@@ -58,7 +58,7 @@ void test_read_normal(void)
 
 void test_read_error(void)
 {
-  int   is_fail;
+  int   is_fail = 0;
   int   fd_case[] = {
     -1, -1024, 0xFFFFFFFF, 0x3FFFFFFF, 0xFFFFFF
   };
@@ -182,7 +182,7 @@ void test_write_normal(void)
 
 void test_write_error(void)
 {
-  int   is_fail;
+  int   is_fail = 0;
   int   fd_case[] = {
     -1, -1024, 0xFFFFFFFF, 0x3FFFFFFF, 0xFFFFFF
   };

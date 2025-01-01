@@ -7,15 +7,15 @@
 ; void ft_list_push_front(t_list** head, void* data);
 ft_list_push_front:
   push  rbp
-  push  rbx
-  push  r12
   mov   rbp, rsp
+
+  push  rbx
 
   cmp   rdi, 0
   je    ret
 
   mov   rbx, rdi
-  mov   r12, rsi
+  mov   rdi, rsi
 
   mov   rdi, rsi
   call  ft_create_elem
@@ -27,7 +27,6 @@ ft_list_push_front:
   mov   [rax + 8], rdi ; new head -> next = old head 
 
 ret:
-  pop   r12
   pop   rbx
   pop   rbp
   ret

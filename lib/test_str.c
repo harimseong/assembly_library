@@ -10,6 +10,7 @@ void test_strlen(void)
     if (strlen(string) == ft_strlen(string)) {
       continue;
     }
+    printf("%zu: %zu != %zu\n", i, strlen(string), ft_strlen(string));
     is_fail = 1;
     break;
   }
@@ -33,6 +34,7 @@ void test_strcpy(void)
     if (strcmp(buffer1, buffer2) == 0) {
       continue;
     }
+    printf("%zu: %s != %s\n", i, buffer1, buffer2);
     is_fail = 1;
     break;
   }
@@ -51,6 +53,7 @@ void test_strcmp(void)
       if (strcmp(s0, s1) == ft_strcmp(s0, s1)) {
         continue;
       }
+      printf("%zu: %d != %d\n", i, strcmp(s0, s1), ft_strcmp(s0, s1));
       is_fail = 1;
       break;
     }
@@ -73,6 +76,7 @@ void test_strdup(void)
     if (result) {
       continue;
     }
+    printf("%zu: %s != %s\n", i, p0, p1);
     is_fail = 1;
     break;
   }

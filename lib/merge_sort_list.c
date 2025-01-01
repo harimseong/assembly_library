@@ -1,9 +1,6 @@
 #include <stdlib.h>
 
-typedef struct s_list {
-  void*           data;
-  struct s_list*  next;
-} t_list;
+#include "list.h"
 
 void      ft_list_swap(t_list* left, t_list* right);
 t_list**  divide(t_list** head, t_list* end, size_t size, int (*cmp)(void*, void*));

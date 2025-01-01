@@ -48,6 +48,7 @@ int main(int argc, char** argv)
   test_write_normal();
   test_write_error();
   test_atoi_base();
+  test_list();
   test_list_sort();
   return 0;
 }

@@ -53,7 +53,10 @@ TESTSRC = test.c \
           test_syscall.c \
           test_atoi_base.c \
           atoi_base_ref.c \
-					test_list_sort.c
+					test_list.c \
+					test_list_sort.c \
+					merge_sort_list.c
+		
 
 TESTOBJ = $(TESTSRC:%.c=%.o)
 

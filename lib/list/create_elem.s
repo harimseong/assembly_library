@@ -7,8 +7,9 @@
 ; t_list* ft_create_elem(void* data);
 ft_create_elem:
   push  rbp
-  push  rbx
   mov   rbp, rsp
+
+  push  rbx
 
   mov   rbx, rdi
   mov   rdi, 16
