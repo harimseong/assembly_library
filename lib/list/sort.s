@@ -14,7 +14,7 @@ ft_list_sort:
   je    ret
 
   mov   rax, [rdi]
-  xor   rcx, rcx
+  xor   rdx, rdx
 loop0:
   cmp   rax, 0
   je    loop0_end
@@ -44,26 +44,29 @@ divide:
 
 divide1:
   push  rbx
+  push  r12
 
-  mov   rdx, rdi
-  mov   rbx, [rdx]     ; rbx = *left
+  mov   r12, rdi
+  mov   rbx, [r12]     ; rbx = *left
   lea   rbx, [rbx + 8] ; rbx = &rbx->next
   mov   rsi, [rbx]     ; rsi = *rbx
   mov   rsi, [rsi]     ; rsi = rsi->data
-  mov   rdi, [rdx]     ; rdi = *rbx
+  mov   rdi, [r12]     ; rdi = *left
   mov   rdi, [rdi]     ; rdi = rdi->data
   call  rcx
 
   cmp   eax, 0
   jle   divide1_end
 
-  mov   rdi, [rdx]     ; rdi = *rdx
+  mov   rdi, [r12]     ; rdi = *rdx
   mov   rsi, [rbx]     ; rsi = *rbx
   call  ft_list_swap
 
 divide1_end:
   mov   rax, [rbx]     ; rax = *rbx
   lea   rax, [rax + 8] ; rax = &rax->next
+
+  pop   r12
   pop   rbx
   ret
 
@@ -77,19 +80,19 @@ divide2:
   mov   [rsp + 16], rdx
   mov   [rsp + 24], rcx
 
-  mov   rsi, [rdi]
+  mov   rsi, [rdi]      ; rsi = *left
   xor   rax, rax
   shr   rdx, 1
 divide2_loop:
   cmp   rax, rdx
   je    divide2_loop_end
 
-  mov   rsi, [rsi + 8]
+  mov   rsi, [rsi + 8]  ; rsi = rsi->next
   inc   rax
   jmp   divide2_loop
 
 divide2_loop_end:
-  sub   [rsp + 16], rax
+  sub   [rsp + 16], rax ; size -= rax
   mov   rdi, [rsp]
   mov   rdx, rax
   call  divide
@@ -103,7 +106,7 @@ divide2_loop_end:
 
   mov   rdi, [rsp]
   mov   rsi, [rsp + 32]
-  mov   rdx, [rsp + 16]
+  mov   rdx, [rsp + 8]
   mov   rcx, [rsp + 24]
   call  merge
 ;
@@ -132,12 +135,12 @@ merge_loop:
   mov   r9, [r12] ; r = *right
 
   cmp   r8, r9
-  jge   merge_loop2
-  cmp   r9, rdx
   je    merge_loop2
+  cmp   r9, rdx
+  je    merge_loop2 ; l == r || r == end
 
-  mov   rdi, [r8]
-  mov   rsi, [r9]
+  mov   rdi, [r8] ; rdi = l->data
+  mov   rsi, [r9] ; rsi = r->data
   call  r14
 
   cmp   rax, 0

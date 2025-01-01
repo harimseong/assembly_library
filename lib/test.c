@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "test.h"
 
 char* g_long_string;
@@ -22,8 +24,13 @@ t_testcase g_cases[] = {
   {NULL}
 };
 
-int main(void)
+int main(int argc, char** argv)
 {
+  if (argc > 1) {
+    unsigned long int seed = *(unsigned long int*)argv[1];
+    printf("seed=%lu\n", seed);
+    srand(seed);
+  }
   g_long_string = malloc(g_long_string_len + 2);
 
   memset(g_long_string, 'a', g_long_string_len + 2);
@@ -41,6 +48,7 @@ int main(void)
   test_write_normal();
   test_write_error();
   test_atoi_base();
+  test_list_sort();
   return 0;
 }
 

@@ -26,6 +26,7 @@ void  test_read_error(void);
 void  test_write_normal(void);
 void  test_write_error(void);
 void  test_atoi_base(void);
+void  test_list_sort(void);
 
 typedef struct testcase {
   char* string;
@@ -36,4 +37,3 @@ extern size_t             g_long_string_len;
 extern unsigned long int  g_random_num;
 extern size_t             g_ncases;
 extern t_testcase         g_cases[];
-
