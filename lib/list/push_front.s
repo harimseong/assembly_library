@@ -9,7 +9,8 @@ ft_list_push_front:
   push  rbp
   mov   rbp, rsp
 
-  push  rbx
+  sub   rsp, 16
+  mov   [rsp], rbx
 
   cmp   rdi, 0
   je    ret
@@ -20,13 +21,14 @@ ft_list_push_front:
   mov   rdi, rsi
   call  ft_create_elem
   cmp   rax, 0
-  jmp   ret
+  je    ret
 
   mov   rdi, [rbx] ; old head
   mov   [rbx], rax ; new head
   mov   [rax + 8], rdi ; new head -> next = old head 
 
 ret:
-  pop   rbx
+  mov   rbx, [rsp]
+  add   rsp, 16
   pop   rbp
   ret

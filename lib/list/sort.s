@@ -12,6 +12,8 @@ ft_list_sort:
 
   cmp   rdi, 0
   je    ret
+; cmp   rsi, 0
+; je    ret
 
   mov   rax, [rdi]
   xor   rdx, rdx

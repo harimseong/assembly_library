@@ -9,7 +9,8 @@ ft_create_elem:
   push  rbp
   mov   rbp, rsp
 
-  push  rbx
+  sub   rsp, 16
+  mov   [rsp], rbx
 
   mov   rbx, rdi
   mov   rdi, 16
@@ -21,6 +22,7 @@ ft_create_elem:
   mov   qword [rax + 8], 0
 
 ret:
-  pop   rbx
+  mov   rbx, [rsp]
+  add   rsp, 16
   pop   rbp
   ret
