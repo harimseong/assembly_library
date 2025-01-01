@@ -480,4 +480,4 @@ and rax, rdx         ; a = d & c;
 ```
 #### 2. list_sort
 Function signature: `void list_sort(t_list** head, int (*cmp)(void*, void*));`
-	sort linked list.
+	sort linked list

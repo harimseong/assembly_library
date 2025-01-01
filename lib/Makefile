@@ -30,7 +30,8 @@ SRC      = string/strlen.s \
            list/delink.s \
            list/size.s \
            list/sort.s \
-           list/remove_if.s
+           list/remove_if.s \
+           list/swap.s
 
 OBJ      = $(SRC:%.s=%.o)
 

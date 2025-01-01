@@ -3,7 +3,7 @@
   align   16
   section .text
 
-; void ft_swap(void* left, void* right);
+; void ft_swap(void** left, void** right);
 ft_swap:
   mov   rdx, [rdi]
   mov   rcx, [rsi]
