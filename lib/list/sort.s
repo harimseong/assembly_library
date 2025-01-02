@@ -71,7 +71,6 @@ divide1_end:
   pop   r12
   pop   rbx
   ret
-
 divide2:
   push  rbp
   mov   rbp, rsp
@@ -92,7 +91,6 @@ divide2_loop:
   mov   rsi, [rsi + 8]  ; rsi = rsi->next
   inc   rax
   jmp   divide2_loop
-
 divide2_loop_end:
   sub   [rsp + 16], rax ; size -= rax
   mov   rdi, [rsp]
@@ -111,7 +109,6 @@ divide2_loop_end:
   mov   rdx, [rsp + 8]
   mov   rcx, [rsp + 24]
   call  merge
-;
 divide_ret:
   mov   rsp, rbp
   pop   rbp

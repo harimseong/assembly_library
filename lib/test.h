@@ -11,9 +11,9 @@
 #define TEST_RESULT(is_fail) \
 {\
   if (is_fail) {\
-    printf("%s FAIL\n", __func__);\
+    printf("%s \033[31mFAIL\033[0m\n", __func__);\
   } else {\
-    printf("%s SUCCESS\n", __func__);\
+    printf("%s \033[32mSUCCESS\033[0m\n", __func__);\
   }\
 }\
 
