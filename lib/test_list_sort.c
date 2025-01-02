@@ -12,9 +12,9 @@
 
 typedef int t_num;
 
-void ft_list_sort(t_list** head, int (*cmp)(void*, void*));
-void merge_sort_list(t_list**head, int (*cmp)(void*, void*));
-int cmp(void* l, void* r);
+void  ft_list_sort(t_list** head, int (*cmp)(void*, void*));
+void  merge_sort_list(t_list**head, int (*cmp)(void*, void*));
+int   cmp(void* l, void* r);
 
 void test_list_sort(void)
 {
@@ -81,6 +81,8 @@ void test_list_sort(void)
       printf("\n");
       break;
     }
+    ft_list_free(c_head, do_nothing);
+    ft_list_free(asm_head, do_nothing);
   }
   TEST_RESULT(is_fail);
 }

@@ -20,6 +20,8 @@ void ft_list_remove_if(t_list** head,
 void  test_list_push_front_and_size();
 void  test_list_sort_boundary();
 void  test_list_remove_if();
+void  do_nothing(void* data) {(void)data;};
+
 extern int cmp(void*, void*);
 
 int   cmp_data(void* l, void* r);
@@ -66,6 +68,7 @@ void  test_list_push_front_and_size()
   if (ft_list_size(head) != size) {
     is_fail = 1;
   }
+  ft_list_free(head, do_nothing);
   TEST_RESULT(is_fail);
 }
 
@@ -128,6 +131,7 @@ void  test_list_remove_if()
     }
     node = node->next;
   }
+  ft_list_free(head, free_data);
   printf("\n");
   TEST_RESULT(is_fail);
 }
