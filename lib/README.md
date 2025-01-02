@@ -481,3 +481,6 @@ and rax, rdx         ; a = d & c;
 #### 2. list_sort
 Function signature: `void list_sort(t_list** head, int (*cmp)(void*, void*));`
 	sort linked list
+
+##### issues
+- lldb error - instruction step over failed (Could not create return address breakpoint. Return address (content of rbx) did not point to executable memory.)
