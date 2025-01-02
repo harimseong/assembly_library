@@ -71,7 +71,10 @@ $(OBJ): %.o: %.s
 
 bonus: all
 
-tester: $(NAME) $(TESTOBJ)
+test: $(TESTNAME)
+	leaks -atExit -- ./$(TESTNAME)
+
+$(TESTNAME): $(NAME) $(TESTOBJ)
 	$(LD) $(LDFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
 	objdump --disassemble --disassembler-options=intel -t -s $(TESTNAME) > $(TESTNAME).s
 
