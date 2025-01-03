@@ -50,6 +50,7 @@ int main(int argc, char** argv)
   test_atoi_base();
   test_list();
   test_list_sort();
+  free(g_long_string);
   return 0;
 }
 

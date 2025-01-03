@@ -49,11 +49,13 @@ void test_strcmp(void)
     for (size_t j = 0; j < g_ncases; ++j) {
       char* s0 = g_cases[i].string;
       char* s1 = g_cases[j].string;
+      int   r0 = strcmp(s0, s1);
+      int   r1 = ft_strcmp(s0, s1);
 
-      if (strcmp(s0, s1) == ft_strcmp(s0, s1)) {
+      if (r0 == r1) {
         continue;
       }
-      printf("%zu: %d != %d\n", i, strcmp(s0, s1), ft_strcmp(s0, s1));
+      printf("%zu: %d != %d\n", i, r0, r1);
       is_fail = 1;
       break;
     }
@@ -71,12 +73,16 @@ void test_strdup(void)
     char* p1 = ft_strdup(string);
     int result = strcmp(p0, p1) == 0 && ft_strcmp(p0, p1) == 0;
 
-    free(p0);
-    free(p1);
+    if (p0 != 0) {
+      free(p0);
+    }
+    if (p1 != 0) {
+      free(p1);
+    }
     if (result) {
       continue;
     }
-    printf("%zu: %s != %s\n", i, p0, p1);
+    printf("%zu: \"%s\" != \"%s\"\n", i, p0, p1);
     is_fail = 1;
     break;
   }

@@ -7,7 +7,7 @@
 #include "test.h"
 #include "list.h"
 
-#define TC_SIZE (1 << 23)
+#define TC_SIZE (1 << 20)
 #define NUM_RANGE (TC_SIZE << 1)
 
 typedef int t_num;
@@ -63,7 +63,7 @@ void test_list_sort(void)
     asm_time = (end_us - start_us) / 1000.0;
 
     printf("%zu element: %f ms(ASM), %f ms(C), %f%%\n",
-        testcase, asm_time, c_time, asm_time / c_time * 100);
+        testcase, asm_time, c_time, c_time != 0. ? asm_time / c_time * 100 : 0.);
     t_list* node = asm_head;
     for (int i = 1; i < arr_size; ++i) {
       if (node->data > node->next->data) {

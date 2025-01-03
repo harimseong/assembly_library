@@ -6,9 +6,9 @@
 
 ; char * strdup(const char * s);
 ft_strdup:
+  push  rbx
   push  r12
-  push  r13
-  mov   r12, rdi
+  mov   rbx, rdi
 
 loop0:
   mov   bl, [rdi]
@@ -16,8 +16,8 @@ loop0:
   cmp   bl, 0
   jnz   loop0
 
-  mov   r13, rdi
-  sub   rdi, r12
+  mov   r12, rdi
+  sub   rdi, rbx
   call  malloc
   cmp   rax, 0
   je    ret
@@ -26,16 +26,16 @@ loop0:
   xor   rsi, rsi
 
 loop1:
-  mov   sil, [r12]
+  mov   sil, [rbx]
   mov   [rdi], sil
-  inc   r12
+  inc   rbx
   inc   rdi
-  cmp   r13, r12
+  cmp   r12, rbx
   jne   loop1
 
   mov   byte [rdi], 0
 
 ret:
-  pop   r13
   pop   r12
+  pop   rbx
   ret

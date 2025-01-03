@@ -7,7 +7,7 @@ CC      = clang
 CFLAGS  = -Wall -Werror -Wextra -g
 
 AS      = nasm
-ASFLAGS = -d$(UNAME)=1 -L${PWD}
+ASFLAGS = -g -d$(UNAME)=1 #-L${PWD}
 
 LD      = ld
 LDFLAGS =
@@ -39,7 +39,7 @@ OBJ      = $(SRC:%.s=%.o)
 ifeq ($(UNAME), Darwin)
 CFLAGS  += --target=x86_64-macos-darwin-macho
 ASFLAGS += -f macho64
-LDFLAGS += -ld_classic -lSystem \
+LDFLAGS += -lSystem \
           -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 else
 CFLAGS  += --target=x86_64-linux-gnu-elf64
@@ -72,11 +72,11 @@ $(OBJ): %.o: %.s
 bonus: all
 
 test: $(TESTNAME)
-	leaks -atExit -- ./$(TESTNAME)
+	./test.sh
 
 $(TESTNAME): $(NAME) $(TESTOBJ)
-	$(LD) $(LDFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
-	objdump --disassemble --disassembler-options=intel -t -s $(TESTNAME) > $(TESTNAME).s
+	$(CC) $(CFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
+	objdump --disassemble -t -s $(TESTNAME) > $(TESTNAME).s
 
 $(TESTOBJ): %.o: %.c
 	$(CC) $(CFLAGS) -c $<

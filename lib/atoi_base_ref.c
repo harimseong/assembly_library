@@ -6,7 +6,7 @@
 /*   By: hseong <hseong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 19:21:54 by hseong            #+#    #+#             */
-/*   Updated: 2024/12/24 22:43:15 by hseong           ###   ########.fr       */
+/*   Updated: 2025/01/03 20:23:23 by hseong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,16 @@ int	ft_atoi_base_ref(char *str, char *base)
 
 int	base_validity(char *base)
 {
-	char	repeat[96];
+	char	repeat[128];
 	int		baselen;
 
 	baselen = 0;
-	while (baselen < 96)
+	while (baselen < 128)
 		repeat[baselen++] = 0;
 	baselen = 0;
 	while (*base != 0)
 	{
-		if (repeat[*base - 32])
+		if (repeat[(int)*base])
 			return (1);
 		else if (*base == '+' || *base == '-') 
 			return (1);
@@ -60,7 +60,7 @@ int	base_validity(char *base)
 			return (1);
 		else if (*base < 32 || *base == 127)
 			return (1);
-		repeat[*base - 32] = 1;
+		repeat[(int)*base] = 1;
 		++base;
 		++baselen;
 	}
