@@ -46,7 +46,7 @@ loop0_remove:
   mov   rdi, r15 ; rdi = r15
   mov   rax, [r15 + 8]
   mov   [rbx], rax ; *head = r15->next
-  call  free ; free(rdi)
+  call_extern_ free ; free(rdi)
   jmp   loop0
 ;}
 
@@ -63,3 +63,5 @@ ret:
 
 ; |  A   |      | data |   B  |      | data |   C  |
 ; | HEAD | ...  |  A   |  A+8 | ...  |  B   |  B+8 | ...
+
+%include "elf_gnustack.mac"

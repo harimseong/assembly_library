@@ -14,7 +14,7 @@ ft_create_elem:
 
   mov   rbx, rdi
   mov   rdi, 16
-  call  malloc
+  call_extern_ malloc
   cmp   rax, 0
   je    ret
 
@@ -26,3 +26,5 @@ ret:
   add   rsp, 16
   pop   rbp
   ret
+
+%include "elf_gnustack.mac"

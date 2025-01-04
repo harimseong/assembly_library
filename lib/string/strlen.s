@@ -22,3 +22,5 @@ loop:
   sub   rax, rdi
 
   ret
+
+%include "elf_gnustack.mac"

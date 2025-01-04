@@ -25,7 +25,7 @@ loop:
 
   mov   rdi, rbx
   mov   rbx, [rbx + 8]
-  call  free
+  call_extern_ free
 
   jmp   loop
 ret:
@@ -35,3 +35,5 @@ ret:
 
   pop   rbp
   ret
+
+%include "elf_gnustack.mac"

@@ -10,3 +10,5 @@ ft_list_swap:
   mov   [rdi], rdx
   mov   [rsi], rax
   ret
+
+%include "elf_gnustack.mac"

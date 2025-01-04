@@ -32,3 +32,5 @@ ret:
   add   rsp, 16
   pop   rbp
   ret
+
+%include "elf_gnustack.mac"

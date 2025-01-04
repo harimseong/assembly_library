@@ -25,7 +25,7 @@ ft_write:
 %endif
 
   push  rax
-  call  get_errno_
+  call  get_errno_ WRT ..plt
   pop   rdi
   mov   [rax], rdi
   mov   rax, -1
@@ -33,3 +33,5 @@ ft_write:
 exit:
   pop   rbp
   ret
+
+%include "elf_gnustack.mac"

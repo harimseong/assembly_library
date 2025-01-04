@@ -32,3 +32,5 @@ loop:
   mov   eax, edx
 
   ret
+
+%include "elf_gnustack.mac"

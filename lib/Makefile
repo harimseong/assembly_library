@@ -7,7 +7,7 @@ CC      = clang
 CFLAGS  = -Wall -Werror -Wextra -g
 
 AS      = nasm
-ASFLAGS = -g -d$(UNAME)=1 #-L${PWD}
+ASFLAGS = -d$(UNAME)=1 #-L${PWD}
 
 LD      = ld
 LDFLAGS =
@@ -21,7 +21,7 @@ SRC      = string/strlen.s \
            string/strcmp.s \
            string/strdup.s \
            util/atoi_base.s \
-					 util/swap.s \
+           util/swap.s \
            syscall/read.s \
            syscall/write.s \
            list/create_elem.s \
@@ -64,10 +64,10 @@ TESTOBJ = $(TESTSRC:%.c=%.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(AR) $(ARFLAGS) $@ $^
+	$(AR)	$(ARFLAGS) $@ $^
 
 $(OBJ): %.o: %.s
-	$(AS) $(ASFLAGS) $<
+	$(AS)	$(ASFLAGS) $<
 
 bonus: all
 
@@ -75,11 +75,11 @@ test: $(TESTNAME)
 	./test.sh
 
 $(TESTNAME): $(NAME) $(TESTOBJ)
-	$(CC) $(CFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
+	$(CC)	$(CFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
 	objdump --disassemble -t -s $(TESTNAME) > $(TESTNAME).s
 
 $(TESTOBJ): %.o: %.c
-	$(CC) $(CFLAGS) -c $<
+	$(CC)	$(CFLAGS) -c $<
 
 clean:
 	$(RM) $(OBJ) $(TESTOBJ)

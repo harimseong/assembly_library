@@ -20,3 +20,5 @@ ft_list_size_loop:
 ft_list_size_ret:
   pop   rbp
   ret
+
+%include "elf_gnustack.mac"

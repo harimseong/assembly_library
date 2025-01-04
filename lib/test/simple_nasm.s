@@ -8,3 +8,5 @@ _main:
   mov   eax, edi
   pop   rbp
   ret
+
+%include "elf_gnustack.mac"

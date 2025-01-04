@@ -174,3 +174,5 @@ merge_ret:
   pop   rbp
   ret
 
+
+%include "elf_gnustack.mac"

@@ -15,3 +15,5 @@ ft_list_insert_next:
   mov   [rdi + 8], rsi ; node->next = new
 ret:
   ret
+
+%include "elf_gnustack.mac"

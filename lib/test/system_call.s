@@ -34,3 +34,5 @@ LBB0_2:
 	ud2
                                         ## -- End function
 .subsections_via_symbols
+
+%include "elf_gnustack.mac"

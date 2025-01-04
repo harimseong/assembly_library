@@ -23,3 +23,13 @@
   extern  %1
 
 %endmacro
+
+%macro  call_extern_   1
+
+  %ifidn __OUTPUT_FORMAT__,elf64
+    call  %1 WRT ..plt
+  %else
+    call  %1
+  %endif
+
+%endmacro

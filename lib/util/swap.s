@@ -11,20 +11,4 @@ ft_swap:
   mov   [rsi], rdx
   ret
 
-; 1.
-; a
-
-; a b
-; b
-
-; 2.
-; b
-; b
-
-; 3.
-; b
-; b a
-
-; 4.
-; b
-; a
+%include "elf_gnustack.mac"

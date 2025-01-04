@@ -484,3 +484,10 @@ Function signature: `void list_sort(t_list** head, int (*cmp)(void*, void*));`
 
 ##### issues
 - lldb error - instruction step over failed (Could not create return address breakpoint. Return address (content of rbx) did not point to executable memory.)
+
+#### Linux (ELF64) linking error
+- stack
+	[Gentoo Wiki - GNU stack](https://wiki.gentoo.org/wiki/Hardened/GNU_stack_quickstart)
+	[Stack overflow post](https://stackoverflow.com/a/76768457)
+- PLT (Procedure Linkage Table) for PIC
+- [NASM - ELF](https://www.nasm.us/doc/nasmdoc8.html#section-8.9)

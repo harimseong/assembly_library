@@ -16,3 +16,5 @@ loop:
   jnz   loop
 
   ret
+
+%include "elf_gnustack.mac"
