@@ -11,9 +11,9 @@ ft_strdup:
   mov   rbx, rdi
 
 loop0:
-  mov   bl, [rdi]
+  mov   al, [rdi]
   inc   rdi
-  cmp   bl, 0
+  cmp   al, 0
   jnz   loop0
 
   mov   r12, rdi
@@ -32,8 +32,6 @@ loop1:
   inc   rdi
   cmp   r12, rbx
   jne   loop1
-
-  mov   byte [rdi], 0
 
 ret:
   pop   r12

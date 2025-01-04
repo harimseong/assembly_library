@@ -5,32 +5,23 @@
 
 ; int strcmp(const char * s1, const char * s2);
 ft_strcmp:
-  xor   edx, edx
-  xor   ecx, ecx
+  xor   eax, eax
 
 loop:
   mov   dl, [rdi]
-  mov   cl, [rsi]
+  cmp   dl, [rsi]
+  jne   diff
   inc   rdi
   inc   rsi
   cmp   dl, 0
-  setz  al
+  jne   loop
+  ret
 
-  cmp   cl, 0
-  setz  r8b
-  or    al, r8b
-
-  cmp   dl, cl
-  setne r8b
-  or    al, r8b
-
-  cmp   al, 0
-  je    loop
-
-  xor   eax, eax
-  sub   edx, ecx
-  mov   eax, edx
-
+diff:
+  mov   eax, 1
+  jg    positive
+  neg   eax
+positive:
   ret
 
 %include "elf_gnustack.mac"

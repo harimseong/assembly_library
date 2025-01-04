@@ -4,7 +4,7 @@ TESTNAME= tester_$(UNAME)
 
 # for tester compile
 CC      = clang
-CFLAGS  = -Wall -Werror -Wextra -g
+CFLAGS  = -Wall -Werror -Wextra #-g
 
 AS      = nasm
 ASFLAGS = -d$(UNAME)=1 #-L${PWD}
