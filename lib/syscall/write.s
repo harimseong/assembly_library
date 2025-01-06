@@ -1,9 +1,9 @@
 %include "symbol.mac"
+  section .text
 %include "errno.mac"
-  global_   ft_write
+  global    ft_write
   extern    get_errno_
   align     16
-  section   .text
 
 ; ssize_t write(int fd, void* buf, size_t nbyte);
 ft_write:
@@ -25,7 +25,7 @@ ft_write:
 %endif
 
   push  rax
-  call  get_errno_ WRT ..plt
+  call_extern  get_errno_
   pop   rdi
   mov   [rax], rdi
   mov   rax, -1

@@ -1,7 +1,7 @@
 %include "symbol.mac"
-  global_   ft_list_delink
+  section .text
+  global    ft_list_delink
   align     16
-  section   .text
 
 ; void ft_list_delink(t_list** head, t_list* node);
 ft_list_delink:

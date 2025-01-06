@@ -237,7 +237,7 @@ If there are more than one register, reg0 is source register.
 
 - Every executables generated with or without warning work as expected.
 <br/><br/>
-## Phase 2: Start Writing Code
+## Phase 2: Write Simple Functions
 
 #### 0. Makefile and Miscellaneous
 
@@ -294,7 +294,7 @@ Function signature: `size_t strlen(const char *s);`\
 - GCC option has [-fleading-underscore](https://gcc.gnu.org/onlinedocs/gcc-4.4.0/gcc/Code-Gen-Options.html#index-fleading_002dunderscore-1989) and its counterpart -fno-leading-underscore. clang does not have this option and it seems to use leading underscore by default.
 - C compiler prepend underscore to generated mangled identifiers to avoid name collision between assembly code and c code that have same symbol.
 [Stack overflow - What is the reason function names are prefixed with an underscore by the compiler](https://stackoverflow.com/questions/5908568/what-is-the-reason-function-names-are-prefixed-with-an-underscore-by-the-compile)
-
+- NASM has [preprocessor](https://www.nasm.us/xdoc/2.16.03/html/nasmdoc7.html#section-7.10) for global, local symbol prefix that is useful for mangling symbols.
 
 ##### Load Effective Address
 - `lea` instruction loads effective address from source to destination. Width of destination should be larger than or equal to source.
@@ -314,7 +314,6 @@ Function signature: `char * strcpy(char * dst, const char * src);`\
 
 Function signature: `int strcmp(const char * s1, const char * s2);`\
 	Return difference between first unmatched characters from each null-terminated string.
-
 
 ##### segmentation fault
 ```
@@ -338,6 +337,8 @@ Value of `al` depends on `dl != cl` only. assignment to `a` must be bitwise OR a
 
 Function signature: `char * strdup(const char * s);`\
 	Returns newly allocated null-terminated string which is a copy of the parameter `s`.
+	
+- 
 <br/><br/>
 ### System Call
 
@@ -482,12 +483,27 @@ and rax, rdx         ; a = d & c;
 Function signature: `void list_sort(t_list** head, int (*cmp)(void*, void*));`
 	sort linked list
 
-##### issues
-- lldb error - instruction step over failed (Could not create return address breakpoint. Return address (content of rbx) did not point to executable memory.)
+
+### Issues
+##### LLDB error
+- instruction step over failed (Could not create return address breakpoint. Return address did not point to executable memory).
 
 #### Linux (ELF64) linking error
-- stack
+- executable stack
 	[Gentoo Wiki - GNU stack](https://wiki.gentoo.org/wiki/Hardened/GNU_stack_quickstart)
 	[Stack overflow post](https://stackoverflow.com/a/76768457)
 - PLT (Procedure Linkage Table) for PIC
 - [NASM - ELF](https://www.nasm.us/doc/nasmdoc8.html#section-8.9)
+#### macOS (macho64) assemble error
+A warning occurs when `-Wall` option is applied:
+`warning: 32-bit relative section-crossing relocation [-w+reloc-rel-dword]`
+while NASM assembles files that calls external functions such as malloc, free, \_\_\_errno.
+
+#### PIC (Position Independent Code)
+- [Wikipedia - Relocation](https://en.wikipedia.org/wiki/Relocation_(computing))
+- [Wikipedia - PIC](https://en.wikipedia.org/wiki/Position-independent_code)
+- [Wikipedia - ASLR](https://en.wikipedia.org/wiki/Address_space_layout_randomization)
+
+#### Inapplicable Optimization Option
+- Optimization is necessary to compile linked list merge sort written in C and compare it with assembly version.
+- But list_sort does not work if optimization option `-O1` or higher is applied.

@@ -1,8 +1,8 @@
 %include "symbol.mac"
-  global_ ft_list_sort
-  extern_ ft_list_swap
-  align   16
   section .text
+  global  ft_list_sort
+  extern  ft_list_swap
+  align   16
 
 ; void ft_list_sort(t_list** head, int (*cmp)(void*, void*));
 ; merge sort

@@ -1,8 +1,8 @@
 %include "symbol.mac"
-  global_ ft_create_elem
-  extern_ malloc
-  align   16
   section .text
+  global  ft_create_elem
+  extern  malloc
+  align   16
 
 ; t_list* ft_create_elem(void* data);
 ft_create_elem:
@@ -14,7 +14,7 @@ ft_create_elem:
 
   mov   rbx, rdi
   mov   rdi, 16
-  call_extern_ malloc
+  call_extern  malloc
   cmp   rax, 0
   je    ret
 

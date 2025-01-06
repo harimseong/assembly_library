@@ -1,7 +1,7 @@
 %include "symbol.mac"
-  global_ ft_list_size
-  align   16
   section .text
+  global  ft_list_size
+  align   16
 
 ; int ft_list_size(t_list* head);
 ft_list_size:

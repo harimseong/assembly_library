@@ -20,7 +20,7 @@ void test_list_sort(void)
 {
   int is_fail = 0;
 
-  for (size_t testcase = 1; testcase < TC_SIZE; testcase <<= 1) {
+  for (size_t testcase = 2; testcase < TC_SIZE; testcase <<= 1) {
     struct timeval start;
     struct timeval end;
     double  asm_time;
@@ -29,7 +29,7 @@ void test_list_sort(void)
     t_list*   c_head = 0;
     t_list**  asm_ptr = &asm_head;
     t_list**  c_ptr = &c_head;
-    int arr_size = testcase;
+    int arr_size = testcase - 1;
 
     for (int i = 0; i < arr_size; ++i) {
       void* data = (void*)((size_t)rand() % NUM_RANGE);
@@ -62,8 +62,8 @@ void test_list_sort(void)
     end_us = end.tv_sec * 1000000 + end.tv_usec;
     asm_time = (end_us - start_us) / 1000.0;
 
-    printf("%zu element: %f ms(ASM), %f ms(C), %f%%\n",
-        testcase, asm_time, c_time, c_time != 0. ? asm_time / c_time * 100 : 0.);
+    printf("%d element: %f ms(ASM), %f ms(C), %f%%\n",
+        arr_size, asm_time, c_time, c_time != 0. ? asm_time / c_time * 100 : 0.);
     t_list* node = asm_head;
     for (int i = 1; i < arr_size; ++i) {
       if (node->data > node->next->data) {

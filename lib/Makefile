@@ -7,7 +7,7 @@ CC      = clang
 CFLAGS  = -Wall -Werror -Wextra #-g
 
 AS      = nasm
-ASFLAGS = -d$(UNAME)=1 #-L${PWD}
+ASFLAGS = -Wall -d$(UNAME)=1 #-L${PWD}
 
 LD      = ld
 LDFLAGS =
@@ -76,7 +76,7 @@ test: $(TESTNAME)
 
 $(TESTNAME): $(NAME) $(TESTOBJ)
 	$(CC)	$(CFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
-	objdump --disassemble -t -s $(TESTNAME) > $(TESTNAME).s
+	objdump --disassemble -t -s $(TESTNAME) > $(TESTNAME).dump
 
 $(TESTOBJ): %.o: %.c
 	$(CC)	$(CFLAGS) -c $<

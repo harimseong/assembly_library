@@ -1,6 +1,6 @@
 %include "symbol.mac"
   section .text
-  global_ ft_strcpy
+  global  ft_strcpy
   align 16
 
 ; char * ft_strcpy(char * dst, const char * src);

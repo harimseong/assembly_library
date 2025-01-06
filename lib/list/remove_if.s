@@ -1,6 +1,7 @@
 %include "symbol.mac"
-  global_ ft_list_remove_if
-  extern_ free
+  section .text
+  global  ft_list_remove_if
+  extern  free
   align   16
  
 ; void ft_list_remove_if(
@@ -46,7 +47,7 @@ loop0_remove:
   mov   rdi, r15 ; rdi = r15
   mov   rax, [r15 + 8]
   mov   [rbx], rax ; *head = r15->next
-  call_extern_ free ; free(rdi)
+  call_extern  free ; free(rdi)
   jmp   loop0
 ;}
 

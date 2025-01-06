@@ -1,7 +1,7 @@
 %include "symbol.mac"
-  global_ ft_list_swap
-  align   16
   section .text
+  global  ft_list_swap
+  align   16
 
 ; void ft_list_swap(t_list* left, t_list* right);
 ft_list_swap:

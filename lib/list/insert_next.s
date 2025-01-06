@@ -1,7 +1,7 @@
 %include "symbol.mac"
-  global_ ft_list_insert_next
-  align   16
   section .text
+  global  ft_list_insert_next
+  align   16
 
 ; void ft_list_insert_next(t_list* node, t_list* new);
 ft_list_insert_next:

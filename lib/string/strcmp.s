@@ -1,6 +1,6 @@
 %include "symbol.mac"
   section .text
-  global_ ft_strcmp
+  global  ft_strcmp
   align 16
 
 ; int strcmp(const char * s1, const char * s2);

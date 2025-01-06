@@ -1,8 +1,8 @@
 %include "symbol.mac"
-  global_ ft_list_push_front
-  extern_ ft_create_elem
-  align   16
   section .text
+  global  ft_list_push_front
+  extern  ft_create_elem
+  align   16
 
 ; void ft_list_push_front(t_list** head, void* data);
 ft_list_push_front:

@@ -1,8 +1,8 @@
 %include "symbol.mac"
-  global_ ft_list_free
-  extern_ free
-  align   16
   section .text
+  global  ft_list_free
+  extern  free
+  align   16
 
 ; void ft_list_free(t_list* head, void (*free)(void*));
 ft_list_free:
@@ -25,7 +25,7 @@ loop:
 
   mov   rdi, rbx
   mov   rbx, [rbx + 8]
-  call_extern_ free
+  call_extern  free
 
   jmp   loop
 ret:

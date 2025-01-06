@@ -1,7 +1,7 @@
 %include "symbol.mac"
-  global_ ft_swap
-  align   16
   section .text
+  global  ft_swap
+  align   16
 
 ; void ft_swap(void** left, void** right);
 ft_swap:

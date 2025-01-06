@@ -1,7 +1,7 @@
 %include "symbol.mac"
-  global_   ft_atoi_base
+  section .text
+  global    ft_atoi_base
   align     16
-  section   .text
 
 ; int ft_atoi_base(char* str, char* base);
 ft_atoi_base:

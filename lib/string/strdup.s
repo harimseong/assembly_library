@@ -1,13 +1,15 @@
 %include "symbol.mac"
-  global_ ft_strdup
-  extern_ malloc
-  align   16
   section .text
+  global  ft_strdup
+  extern  malloc
+  align   16
 
 ; char * strdup(const char * s);
 ft_strdup:
+  push  rbp
   push  rbx
   push  r12
+  mov   rbp, rsp
   mov   rbx, rdi
 
 loop0:
@@ -18,7 +20,7 @@ loop0:
 
   mov   r12, rdi
   sub   rdi, rbx
-  call_extern_ malloc
+  call_extern  malloc
   cmp   rax, 0
   je    ret
 
@@ -36,6 +38,7 @@ loop1:
 ret:
   pop   r12
   pop   rbx
+  pop   rbp
   ret
 
 %include "elf_gnustack.mac"

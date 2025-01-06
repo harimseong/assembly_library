@@ -1,4 +1,8 @@
+#include <stdlib.h>
+
 int main(int argc, char** argv)
 {
-  return argc;
+  int* a = malloc(4);
+  *a = 42;
+  return *a;
 }
