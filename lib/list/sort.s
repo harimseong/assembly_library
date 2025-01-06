@@ -135,7 +135,7 @@ merge_loop:
   mov   rsi, [r9] ; rsi = r->data
   call  r14
 
-  cmp   rax, 0
+  cmp   eax, 0 ; cmp returns 32bit integer. must use eax
   jle   merge_loop1
 
   mov   rax, [r9 + 8]

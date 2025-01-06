@@ -1,0 +1,59 @@
+test_strlen [32mSUCCESS[0m
+test_strcpy [32mSUCCESS[0m
+test_strcmp [32mSUCCESS[0m
+test_strdup [32mSUCCESS[0m
+test_read_normal [32mSUCCESS[0m
+test_read_error [32mSUCCESS[0m
+test_write_normal [32mSUCCESS[0m
+test_write_error [32mSUCCESS[0m
+test_atoi_base_whitespace [32mSUCCESS[0m
+test_atoi_base_sign [32mSUCCESS[0m
+test_atoi_base_random [32mSUCCESS[0m
+i: size=0, 0 
+i: size=1, 1 0 
+i: size=2, 2 1 0 
+i: size=3, 3 2 1 0 
+i: size=4, 4 3 2 1 0 
+test_list_push_front_and_size [32mSUCCESS[0m
+test_list_sort_boundary [32mSUCCESS[0m
+before:
+data->str=hello, *data->arr=0
+data->str=bbb, *data->arr=42
+data->str=ccc, *data->arr=2
+data->str=ddd, *data->arr=3
+data->str=eee, *data->arr=4
+data->str=hello, *data->arr=42
+data->str=ggg, *data->arr=6
+data->str=hhh, *data->arr=7
+data->str=iii, *data->arr=8
+data->str=jjj, *data->arr=42
+
+after:
+data->str=iii, *data->arr=8
+data->str=hhh, *data->arr=7
+data->str=ggg, *data->arr=6
+data->str=eee, *data->arr=4
+data->str=ddd, *data->arr=3
+data->str=ccc, *data->arr=2
+
+test_list_remove_if [32mSUCCESS[0m
+1 element: 0.251000 ms(ASM), 0.210000 ms(C), 119.523810%
+3 element: 1.286000 ms(ASM), 1.742000 ms(C), 73.823192%
+7 element: 0.097000 ms(ASM), 0.435000 ms(C), 22.298851%
+15 element: 0.017000 ms(ASM), 0.016000 ms(C), 106.250000%
+31 element: 0.029000 ms(ASM), 0.152000 ms(C), 19.078947%
+63 element: 0.060000 ms(ASM), 0.236000 ms(C), 25.423729%
+127 element: 0.132000 ms(ASM), 0.130000 ms(C), 101.538462%
+255 element: 0.289000 ms(ASM), 0.282000 ms(C), 102.482270%
+511 element: 0.644000 ms(ASM), 0.635000 ms(C), 101.417323%
+1023 element: 1.447000 ms(ASM), 1.389000 ms(C), 104.175666%
+2047 element: 3.153000 ms(ASM), 3.360000 ms(C), 93.839286%
+4095 element: 6.783000 ms(ASM), 6.915000 ms(C), 98.091106%
+8191 element: 14.907000 ms(ASM), 16.861000 ms(C), 88.411126%
+16383 element: 33.271000 ms(ASM), 35.183000 ms(C), 94.565557%
+32767 element: 73.799000 ms(ASM), 75.274000 ms(C), 98.040492%
+65535 element: 164.652000 ms(ASM), 168.937000 ms(C), 97.463552%
+131071 element: 352.302000 ms(ASM), 385.471000 ms(C), 91.395202%
+262143 element: 818.532000 ms(ASM), 862.770000 ms(C), 94.872562%
+524287 element: 1871.047000 ms(ASM), 1893.284000 ms(C), 98.825480%
+test_list_sort [32mSUCCESS[0m

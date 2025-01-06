@@ -4,10 +4,10 @@ TESTNAME= tester_$(UNAME)
 
 # for tester compile
 CC      = clang
-CFLAGS  = -Wall -Werror -Wextra -O -fPIE#-g
+CFLAGS  = -Wall -Werror -Wextra -fPIE -O3 #-g
 
 AS      = nasm
-ASFLAGS = -Wall -d$(UNAME)=1 #-L${PWD}
+ASFLAGS = -Wall -d$(UNAME)=1 -g #-L${PWD}
 
 LD      = ld
 LDFLAGS =
@@ -73,6 +73,9 @@ bonus: all
 
 test: $(TESTNAME)
 	./test.sh
+
+test_leak: $(TESTNAME)
+	./test.sh leak
 
 $(TESTNAME): $(NAME) $(TESTOBJ)
 	$(CC)	$(CFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
