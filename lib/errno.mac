@@ -1,7 +1,7 @@
 %ifdef Linux
-  %define get_errno_ __errno_location
+  %define get_errno __errno_location
 %elifdef Darwin
-  %define get_errno_ __error
+  %define get_errno __error
 %else
   %error "environment not supported"
 %endif

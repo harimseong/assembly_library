@@ -4,16 +4,16 @@ TESTNAME= tester_$(UNAME)
 
 # for tester compile
 CC      = clang
-CFLAGS  = -Wall -Werror -Wextra -O0 #-g
+CFLAGS  = -Wall -Werror -Wextra -O -fPIE#-g
 
 AS      = nasm
-ASFLAGS = -Wall -w-reloc-rel-dword -d$(UNAME)=1 #-L${PWD}
+ASFLAGS = -Wall -d$(UNAME)=1 #-L${PWD}
 
 LD      = ld
 LDFLAGS =
 
 AR      = ar
-ARFLAGS = -r
+ARFLAGS = -rs
 
 
 SRC      = string/strlen.s \
@@ -76,7 +76,7 @@ test: $(TESTNAME)
 
 $(TESTNAME): $(NAME) $(TESTOBJ)
 	$(CC)	$(CFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
-	objdump --disassemble -t -s $(TESTNAME) > $(TESTNAME).dump
+	objdump --disassemble -M intel -t -s $(TESTNAME) > $(TESTNAME).dump
 
 $(TESTOBJ): %.o: %.c
 	$(CC)	$(CFLAGS) -c $<

@@ -12,8 +12,6 @@ ft_list_sort:
 
   cmp   rdi, 0
   je    ret
-; cmp   rsi, 0
-; je    ret
 
   mov   rax, [rdi]
   xor   rdx, rdx
@@ -25,11 +23,9 @@ loop0:
   mov   rax, [rax + 8]
   jmp   loop0
 loop0_end:
-
   mov   rcx, rsi
   xor   rsi, rsi
   call  divide
-
 ret:
   pop   rbp
   ret
@@ -43,7 +39,6 @@ divide:
   mov   rax, [rdi]
   lea   rax, [rax + 8]
   ret
-
 divide1:
   push  rbx
   push  r12
@@ -58,16 +53,14 @@ divide1:
   call  rcx
 
   cmp   eax, 0
-  jle   divide1_end
+  jle   divide1_ret
 
   mov   rdi, [r12]     ; rdi = *rdx
   mov   rsi, [rbx]     ; rsi = *rbx
   call  ft_list_swap
-
-divide1_end:
+divide1_ret:
   mov   rax, [rbx]     ; rax = *rbx
   lea   rax, [rax + 8] ; rax = &rax->next
-
   pop   r12
   pop   rbx
   ret
@@ -109,7 +102,7 @@ divide2_loop_end:
   mov   rdx, [rsp + 8]
   mov   rcx, [rsp + 24]
   call  merge
-divide_ret:
+
   mov   rsp, rbp
   pop   rbp
   ret
@@ -149,12 +142,10 @@ merge_loop:
   mov   [r12], rax     ; *right = r->next
   mov   [r9 + 8], r8   ; r->next = l
   mov   [rbx], r9      ; *left = r
-
 merge_loop1:
   mov   rbx, [rbx]
   lea   rbx, [rbx + 8] ; left = &(*left)->next
   jmp   merge_loop
-
 merge_loop2:
   cmp   [r12], r13     ; *right != end
   je    merge_ret
@@ -162,7 +153,6 @@ merge_loop2:
   mov   r12, [r12]
   lea   r12, [r12 + 8] ; right = &(*right)->next
   jmp   merge_loop2
-
 merge_ret:
   mov   rax, r12
   mov   rbx, [rsp]
@@ -173,6 +163,5 @@ merge_ret:
   mov   rsp, rbp
   pop   rbp
   ret
-
 
 %include "format.mac"

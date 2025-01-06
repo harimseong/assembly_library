@@ -12,7 +12,6 @@
 typedef int t_num;
 
 void ft_list_sort(t_list** head, int (*cmp)(void*, void*));
-void merge_sort_list(t_list** head, int (*cmp)(void*, void*)) {ft_list_sort(head, cmp);};
 int cmp(void* l, void* r);
 
 int main(int argc, char** argv)
@@ -24,7 +23,7 @@ int main(int argc, char** argv)
     printf("seed=%lu\n", seed);
     srand(seed);
   }
-  for (size_t testcase = 1; testcase < TC_SIZE; testcase <<= 1) {
+  for (size_t testcase = 8; testcase < TC_SIZE; testcase <<= 1) {
     struct timeval start;
     struct timeval end;
     t_list*   head = 0;
@@ -44,7 +43,7 @@ int main(int argc, char** argv)
     }
 
     gettimeofday(&start, 0);
-    merge_sort_list(&head, cmp);
+    ft_list_sort(&head, cmp);
     gettimeofday(&end, 0);
 
     size_t start_us = start.tv_sec * 1000000 + start.tv_usec;
