@@ -133,6 +133,7 @@ void  test_list_remove_if()
   }
   ft_list_free(head, free_data);
   printf("\n");
+//ft_list_remove_if(0, &ref, cmp_data, free_data);
   TEST_RESULT(is_fail);
 }
 

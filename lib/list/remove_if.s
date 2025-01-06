@@ -24,6 +24,7 @@ ft_list_remove_if:
   mov   r12, rsi
   mov   r13, rdx
   mov   r14, rcx
+; assert(addr!=0)
 loop0:
   mov   r15, [rbx] ; r15 = *head
   cmp   r15, 0     ; r15 == 0
