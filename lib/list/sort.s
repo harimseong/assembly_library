@@ -68,7 +68,7 @@ divide2:
   push  rbp
   mov   rbp, rsp
 
-  sub   rsp, 40
+  sub   rsp, 48
   mov   [rsp], rdi
   mov   [rsp + 8], rsi
   mov   [rsp + 16], rdx

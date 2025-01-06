@@ -13,7 +13,7 @@ ft_list_remove_if:
   push  rbp
   mov   rbp, rsp
 
-  sub   rsp, 40
+  sub   rsp, 48
   mov   [rsp + 32], r15
   mov   [rsp + 24], r14
   mov   [rsp + 16], r13

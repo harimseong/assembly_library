@@ -9,7 +9,7 @@ ft_atoi_base:
   push  rbx
   mov   rbp, rsp
 
-  sub   rsp, 24
+  sub   rsp, 32
   mov   [rsp + 8], rsi
   mov   [rsp], rdi
 
