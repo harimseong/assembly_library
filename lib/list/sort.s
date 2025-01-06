@@ -175,4 +175,4 @@ merge_ret:
   ret
 
 
-%include "elf_gnustack.mac"
+%include "format.mac"

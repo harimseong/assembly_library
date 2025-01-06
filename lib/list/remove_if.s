@@ -65,4 +65,4 @@ ret:
 ; |  A   |      | data |   B  |      | data |   C  |
 ; | HEAD | ...  |  A   |  A+8 | ...  |  B   |  B+8 | ...
 
-%include "elf_gnustack.mac"
+%include "format.mac"

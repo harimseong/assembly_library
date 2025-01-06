@@ -17,4 +17,4 @@ loop:
 
   ret
 
-%include "elf_gnustack.mac"
+%include "format.mac"

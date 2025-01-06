@@ -485,7 +485,7 @@ Function signature: `void list_sort(t_list** head, int (*cmp)(void*, void*));`
 
 
 ### Issues
-##### LLDB error
+##### LLDB instruction error
 - instruction step over failed (Could not create return address breakpoint. Return address did not point to executable memory).
 
 #### Linux (ELF64) linking error
@@ -494,15 +494,18 @@ Function signature: `void list_sort(t_list** head, int (*cmp)(void*, void*));`
 	[Stack overflow post](https://stackoverflow.com/a/76768457)
 - PLT (Procedure Linkage Table) for PIC
 - [NASM - ELF](https://www.nasm.us/doc/nasmdoc8.html#section-8.9)
-#### macOS (macho64) assemble error
+#### macOS (macho64) assemble warning
 A warning occurs when `-Wall` option is applied:
 `warning: 32-bit relative section-crossing relocation [-w+reloc-rel-dword]`
 while NASM assembles files that calls external functions such as malloc, free, \_\_\_errno.
+- [NASM appendix A](https://www.nasm.us/xdoc/2.16.03/html/nasmdoca.html)
+	Relative relocation that could not be resolved at *assembly time* was generated in the output format.
 
 #### PIC (Position Independent Code)
 - [Wikipedia - Relocation](https://en.wikipedia.org/wiki/Relocation_(computing))
 - [Wikipedia - PIC](https://en.wikipedia.org/wiki/Position-independent_code)
 - [Wikipedia - ASLR](https://en.wikipedia.org/wiki/Address_space_layout_randomization)
+- [Apple Documentation - PIC](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/MachOTopics/1-Articles/dynamic_code.html#//apple_ref/doc/uid/TP40002528-SW1)
 
 #### Inapplicable Optimization Option
 - Optimization is necessary to compile linked list merge sort written in C and compare it with assembly version.

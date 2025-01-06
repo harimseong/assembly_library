@@ -224,4 +224,4 @@ get_base_idx_ret:
   sub   rax, rsi
   ret
 
-%include "elf_gnustack.mac"
+%include "format.mac"

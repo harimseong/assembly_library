@@ -41,4 +41,4 @@ ret:
   pop   rbp
   ret
 
-%include "elf_gnustack.mac"
+%include "format.mac"

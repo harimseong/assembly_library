@@ -16,4 +16,4 @@ ft_list_insert_next:
 ret:
   ret
 
-%include "elf_gnustack.mac"
+%include "format.mac"

@@ -11,4 +11,4 @@ ft_swap:
   mov   [rsi], rdx
   ret
 
-%include "elf_gnustack.mac"
+%include "format.mac"

@@ -4,10 +4,10 @@ TESTNAME= tester_$(UNAME)
 
 # for tester compile
 CC      = clang
-CFLAGS  = -Wall -Werror -Wextra #-g
+CFLAGS  = -Wall -Werror -Wextra -O0 #-g
 
 AS      = nasm
-ASFLAGS = -Wall -d$(UNAME)=1 #-L${PWD}
+ASFLAGS = -Wall -w-reloc-rel-dword -d$(UNAME)=1 #-L${PWD}
 
 LD      = ld
 LDFLAGS =
