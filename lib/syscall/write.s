@@ -1,6 +1,6 @@
 %include "symbol.mac"
-  section .text
 %include "errno.mac"
+  section .text
   global    ft_write
   extern    get_errno
   align     16
