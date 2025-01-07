@@ -4,10 +4,10 @@ TESTNAME= tester_$(UNAME)
 
 # for tester compile
 CC      = clang
-CFLAGS  = -Wall -Werror -Wextra -fPIE -O3 #-g
+CFLAGS  = -Wall -Werror -Wextra -Iinclude -fPIE -O3 #-g
 
 AS      = nasm
-ASFLAGS = -Wall -d$(UNAME)=1 -g #-L${PWD}
+ASFLAGS = -Wall -d$(UNAME)=1 -Imacro #-L${PWD}
 
 LD      = ld
 LDFLAGS =
@@ -49,14 +49,14 @@ LDFLAGS += -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
            -L/usr/lib/x86_64-linux-gnu -lc
 endif
 
-TESTSRC = test.c \
-          test_str.c \
-          test_syscall.c \
-          test_atoi_base.c \
-          atoi_base_ref.c \
-					test_list.c \
-					test_list_sort.c \
-					merge_sort_list.c
+TESTSRC = test/test.c \
+          test/test_str.c \
+          test/test_syscall.c \
+          test/test_atoi_base.c \
+          test/atoi_base_ref.c \
+					test/test_list.c \
+					test/test_list_sort.c \
+					test/merge_sort_list.c
 		
 
 TESTOBJ = $(TESTSRC:%.c=%.o)
@@ -72,17 +72,17 @@ $(OBJ): %.o: %.s
 bonus: all
 
 test: $(TESTNAME)
-	./test.sh
+	./test/test.sh
 
 test_leak: $(TESTNAME)
-	./test.sh leak
+	./test/test.sh leak
 
 $(TESTNAME): $(NAME) $(TESTOBJ)
 	$(CC)	$(CFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
-	objdump --disassemble -M intel -t -s $(TESTNAME) > $(TESTNAME).dump
+	objdump --disassemble -t -s $(TESTNAME) > $(TESTNAME).dump
 
 $(TESTOBJ): %.o: %.c
-	$(CC)	$(CFLAGS) -c $<
+	$(CC)	$(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJ) $(TESTOBJ)
@@ -93,4 +93,4 @@ fclean: clean
 re: fclean
 	$(MAKE) all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re bonus test test_leak
