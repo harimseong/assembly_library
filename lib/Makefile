@@ -88,7 +88,7 @@ clean:
 	$(RM) $(OBJ) $(TESTOBJ)
 
 fclean: clean
-	$(RM) $(NAME) $(TESTNAME)
+	$(RM) $(NAME) $(TESTNAME) $(TESTNAME).dump
 
 re: fclean
 	$(MAKE) all

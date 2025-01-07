@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "test.h"
-#include "list.h"
+#include "libasm_list.h"
 
 typedef struct s_data {
   char* str;

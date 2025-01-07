@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #include "test.h"
-#include "list.h"
+#include "libasm_list.h"
 
 #define TC_SIZE (1 << 20)
 #define NUM_RANGE (TC_SIZE << 1)
@@ -15,6 +15,8 @@ typedef int t_num;
 void  ft_list_sort(t_list** head, int (*cmp)(void*, void*));
 void  merge_sort_list(t_list**head, int (*cmp)(void*, void*));
 int   cmp(void* l, void* r);
+void  do_nothing(void* data);
+
 
 void test_list_sort(void)
 {

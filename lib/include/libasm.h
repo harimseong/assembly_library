@@ -1,3 +1,6 @@
+#ifndef LIBASM_H
+#define LIBASM_H
+
 #include <unistd.h>
 #include <stddef.h>
 
@@ -10,3 +13,5 @@ ssize_t ft_read(int fd, void * buf, size_t nbyte);
 ssize_t ft_write(int fd, const void * buf, size_t nbyte);
 
 int     ft_atoi_base(char* str, char* base);
+
+#endif

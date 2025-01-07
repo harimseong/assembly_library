@@ -1,3 +1,6 @@
+#ifndef TEST_H
+#define TEST_H
+
 #include <sys/errno.h>
 
 #include <limits.h>
@@ -38,3 +41,5 @@ extern size_t             g_long_string_len;
 extern unsigned long int  g_random_num;
 extern size_t             g_ncases;
 extern t_testcase         g_cases[];
+
+#endif
