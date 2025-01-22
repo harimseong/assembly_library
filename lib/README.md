@@ -510,3 +510,4 @@ while NASM assembles files that calls external functions such as malloc, free, \
 #### Inapplicable Optimization Option
 - Optimization is necessary to compile linked list merge sort written in C and compare it with assembly version.
 - But list_sort does not work if optimization option `-O1` or higher is applied.
+- Found a bug that `rax` was placed where `eax` must be.
