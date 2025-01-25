@@ -122,7 +122,6 @@ Protected_START:
 	
 Task1:
 
-	
 	; Print "Entering Task1"
 	mov		bl,	2
 	mov		eax, MSG_Task1
