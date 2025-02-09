@@ -1,9 +1,5 @@
 # Assembly Library Project
 
-This document describes development process of the project.
-
----
-
 ### Requirements
 
 #### Function Implementation
