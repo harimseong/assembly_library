@@ -11,6 +11,7 @@ This project aims at re-writing following functions in assembly language.
 - strdup(3)
 - read(2)
 - write(2)
+- and essential linked list functions and sort for fun.
 
 Makefile is required to build a library consists of the functions.
 
@@ -18,7 +19,7 @@ main function is required to test these functions.
 #### Constraints
 - Conforms to System V AMD64 ABI calling convention.
 - Must be able to generate position independent executable.
-- Requires system call error handling (e.g. errno)
+- Requires system call error handling (i.e. errno)
 
 #### Expected Knowledges
 
