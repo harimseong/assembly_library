@@ -248,9 +248,9 @@ If there are more than one register, reg0 is source register.
 - Examine final machine code by executing `objdump --disassemble --disassembler-options=intel --syms FILENAME > FILENAME.s` command.
 
 
-##### Cross-assemble
+##### Portability issue
 - clang in macOS automatically prepends global symbol with underscore.
-- Cross-assemble was not possible by inconsistent symbol name.
+- Could not assemble due to inconsistent symbol name. macOS requires leading underscore for global symbol but Linux does not.
 - Used NASM pre-defined macro and multi-line macro to resolve the issue.
 <br/><br/>
 #### 1. strlen
@@ -285,8 +285,8 @@ Function signature: `size_t strlen(const char *s);`\
 
 
 ##### symbol `_strlen`
-- Symbol `strlen` is automatically prepended by `_` clang when main function is compiled. 
-- Use `_strlen` as symbol name.
+- For C source code, symbol `strlen` is automatically prepended by `_` when compiled.
+- Use `_strlen` for assembly symbol name.
 - Why does this happen?
 - GCC option has [-fleading-underscore](https://gcc.gnu.org/onlinedocs/gcc-4.4.0/gcc/Code-Gen-Options.html#index-fleading_002dunderscore-1989) and its counterpart -fno-leading-underscore. clang does not have this option and it seems to use leading underscore by default.
 - C compiler prepend underscore to generated mangled identifiers to avoid name collision between assembly code and c code that have same symbol.
